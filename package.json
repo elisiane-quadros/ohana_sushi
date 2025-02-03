@@ -12,9 +12,13 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@types/styled-components": "^5.1.34",
+    "antd": "^5.21.3",
+    "axios": "^1.7.7",
     "next": "14.2.15",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "styled-components": "^6.1.14"
   },
   "devDependencies": {
     "@types/node": "^20",
