@@ -12,13 +12,19 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
+    "@reduxjs/toolkit": "^2.5.1",
     "@types/styled-components": "^5.1.34",
     "antd": "^5.21.3",
     "axios": "^1.7.7",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
-    "styled-components": "^6.1.14"
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
+    "styled-components": "^6.1.14",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@types/node": "^20",

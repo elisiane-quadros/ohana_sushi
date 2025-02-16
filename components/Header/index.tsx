@@ -1,13 +1,30 @@
 'use client';
 import React from 'react';
-import { HeaderContainer, Logo, Overlay } from './styles';
+import {
+  HeaderContainer,
+  HeaderContent,
+  HightLightText,
+  Overlay,
+  TextContainer,
+} from './styles';
 
 const Header: React.FC = () => {
   return (
     <HeaderContainer>
       <Overlay>
-        <Logo />
-        <span>Seg a Dom das 18:00 às 23:00</span>
+        <HeaderContent>
+          <TextContainer>
+            <h2>
+              Sabores <HightLightText>incríveis</HightLightText> e qualidade só
+              aqui no <HightLightText>Ohana Sushi</HightLightText>
+            </h2>
+            <span>
+              Peça e experimente o melhor{' '}
+              <HightLightText>Delivery</HightLightText> da Zona Sul de Porto
+              Alegre.
+            </span>
+          </TextContainer>
+        </HeaderContent>
       </Overlay>
     </HeaderContainer>
   );
