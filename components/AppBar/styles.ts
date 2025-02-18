@@ -5,10 +5,10 @@ export const AppBarContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  /* width: 100vw;
-  max-width: 100vw; */
-
+  height: 100px;
   position: absolute;
+  top: 0;
+  z-index: 10;
 `;
 
 export const AppBarArea = styled.div`
@@ -17,9 +17,10 @@ export const AppBarArea = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   width: 1376px;
+  height: 100px;
   padding: 16px 16px;
 
-  @media (min-width: 768px) {
+  /* @media (min-width: 768px) {
     padding: 16px 24px;
-  }
+  } */
 `;

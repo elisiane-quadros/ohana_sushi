@@ -9,9 +9,21 @@ import ButtonLink from '../ButtonLink';
 import Icon from '@mdi/react';
 import { mdiInstagram, mdiWhatsapp } from '@mdi/js';
 import useResponsive from '@/hooks/useResponsive';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import { setShowCart } from '@/store/features/cart';
 
 const AppBar = () => {
   const { isXs } = useResponsive();
+  const showCart: boolean = useAppSelector((state) => state.cart.showCart);
+  const pathname = usePathname();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const newShowCart: boolean = pathname === '/';
+    dispatch(setShowCart(newShowCart));
+  }, [pathname, dispatch]);
 
   return (
     <AppBarContainer>
@@ -33,7 +45,7 @@ const AppBar = () => {
             </ButtonLink>
           </Flex>
         </Flex>
-        <Cart />
+        {showCart ? <Cart /> : null}
       </AppBarArea>
     </AppBarContainer>
   );

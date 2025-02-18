@@ -15,6 +15,7 @@ import Image from 'next/image';
 import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
 import ButtonPrimary from '../ButtonPrimary';
 import ButtonLink from '../ButtonLink';
+import Link from 'next/link';
 
 export const Cart = () => {
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
@@ -193,7 +194,13 @@ export const Cart = () => {
             </CartContent>
             <SeeDetailsButtonContainer>
               <Divider style={{ margin: '8px 0' }} />
-              <ButtonPrimary>Comprar</ButtonPrimary>
+              {cart ? (
+                <Link href={`/carrinho/${cart.id}`}>
+                  <ButtonPrimary style={{ width: '100%' }}>
+                    Comprar
+                  </ButtonPrimary>
+                </Link>
+              ) : null}
               <ButtonLink type="link" onClick={handleExpandCart}>
                 {expandCart ? 'ocultar detalhes' : 'ver detalhes'}
               </ButtonLink>

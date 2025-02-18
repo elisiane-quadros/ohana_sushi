@@ -185,8 +185,6 @@ const ChooseButton = ({ product, productIsInCart }: ChooseButtonProps) => {
     }
   };
 
-  console.log(cart);
-
   useEffect(() => {
     if (cart) {
       const newQuantityItem =

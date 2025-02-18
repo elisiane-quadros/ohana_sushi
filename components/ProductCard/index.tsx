@@ -30,7 +30,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const verifyIfProductIsInCart = () => {
     if (cart && cart?.cartItemList) {
-      console.log('1');
       const isInCart = !!cart?.cartItemList.find(
         (cartItem) => cartItem.id === product.id,
       );

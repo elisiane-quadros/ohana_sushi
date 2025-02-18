@@ -4,10 +4,12 @@ import type { RootState } from '@/store/index';
 
 type CartState = {
   cart: CartInterface | null;
+  showCart: boolean;
 };
 
 const initialState: CartState = {
   cart: null,
+  showCart: false,
 };
 
 const cartSlice = createSlice({
@@ -20,10 +22,13 @@ const cartSlice = createSlice({
     ) => {
       state.cart = action.payload;
     },
+    setShowCart: (state: CartState, action: PayloadAction<boolean>) => {
+      state.showCart = action.payload;
+    },
   },
 });
 
-export const { setCart } = cartSlice.actions;
+export const { setCart, setShowCart } = cartSlice.actions;
 
 export const selectCart = (state: RootState) => state.cart;
 

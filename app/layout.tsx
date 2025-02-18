@@ -4,6 +4,7 @@ import { Kaushan_Script, Inria_Sans } from 'next/font/google';
 import './globals.css';
 import AppBar from '@/components/AppBar';
 import ReduxAndAppProvider from '@/providers/ReduxAndAppProvider';
+import { Flex } from 'antd';
 
 const kaushanScript = Kaushan_Script({
   subsets: ['latin'],
@@ -36,7 +37,9 @@ export default function RootLayout({
       >
         <ReduxAndAppProvider>
           <AppBar />
-          {children}
+          <Flex vertical style={{ marginTop: '100px' }}>
+            {children}
+          </Flex>
         </ReduxAndAppProvider>
       </body>
     </html>

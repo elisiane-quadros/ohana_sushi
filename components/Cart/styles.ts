@@ -13,12 +13,12 @@ export const CartContainer = styled.div`
   position: fixed;
   display: flex;
   justify-content: flex-end;
-  width: 100%;
+  /* width: 100%; */
   z-index: 100;
   max-width: 316px;
   right: 16px;
   margin-top: 8px;
-
+  box-shadow: 4px 4px 20px #d8161630;
   @media (min-width: 1376px) {
     right: calc((100vw - 1360px) / 2);
   }
