@@ -2,7 +2,6 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { Kaushan_Script, Inria_Sans } from 'next/font/google';
 import './globals.css';
-import AppBar from '@/components/AppBar';
 import ReduxAndAppProvider from '@/providers/ReduxAndAppProvider';
 import { Flex } from 'antd';
 
@@ -36,7 +35,6 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <ReduxAndAppProvider>
-          <AppBar />
           <Flex vertical style={{ marginTop: '100px' }}>
             {children}
           </Flex>

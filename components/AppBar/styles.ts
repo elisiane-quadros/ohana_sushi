@@ -19,8 +19,4 @@ export const AppBarArea = styled.div`
   width: 1376px;
   height: 100px;
   padding: 16px 16px;
-
-  /* @media (min-width: 768px) {
-    padding: 16px 24px;
-  } */
 `;

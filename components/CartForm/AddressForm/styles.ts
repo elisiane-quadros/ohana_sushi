@@ -1,8 +1,9 @@
 import { Flex } from 'antd';
 import styled from 'styled-components';
 
-export const AddressCardContainer = styled(Flex)`
+export const AddressFormContainer = styled(Flex)`
   background: #fff;
-  padding: 16px;
   border-radius: 4px;
+  padding: 16px;
+  width: 100%;
 `;

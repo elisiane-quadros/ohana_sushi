@@ -1,6 +1,6 @@
 'use client';
 
-import AddressCart from '@/components/AddressCard';
+import CartForm from '@/components/CartForm';
 import { useAppSelector } from '@/hooks/redux';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { Flex, Result } from 'antd';
@@ -23,7 +23,7 @@ const CartArea = () => {
   return releaseCart ? (
     <Flex justify="center" style={{ width: '100%' }}>
       <Flex style={{ width: '100%', maxWidth: '1376px', margin: '24px 0' }}>
-        <AddressCart />
+        <CartForm />
       </Flex>
     </Flex>
   ) : (
