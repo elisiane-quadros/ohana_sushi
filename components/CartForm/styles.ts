@@ -15,20 +15,6 @@ export const AddressAndPaymentContainer = styled(Flex)`
   flex: 2;
 `;
 
-export const AddressFormContainer = styled(Flex)`
-  background: #fff;
-  border-radius: 4px;
-  padding: 16px;
-  width: 100%;
-`;
-
-export const PaymentMethodFormContainer = styled(Flex)`
-  background: #fff;
-  border-radius: 4px;
-  padding: 16px;
-  width: 100%;
-`;
-
 export const CartResumeContainer = styled(Flex)`
   background: #fff;
   border-radius: 4px;

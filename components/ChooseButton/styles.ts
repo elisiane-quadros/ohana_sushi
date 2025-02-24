@@ -1,3 +1,4 @@
+import { Button, Input } from 'antd';
 import styled from 'styled-components';
 
 export const ChooseButtonContainer = styled.div`
@@ -46,7 +47,19 @@ export const InputBottomBorder = styled.div`
   );
 `;
 
-export const SubtractButton = styled.button`
+export const SubtractButton = styled(Button)`
+  background-color: #333;
+  border-radius: 6px 0 0 6px;
+  padding: 4px 8px;
+  border: none;
+  width: 34px;
+
+  &:hover {
+    background-color: #333333dd !important;
+  }
+`;
+
+export const SubtractButton2 = styled.button`
   position: relative;
   width: 32px;
   height: 32px;
@@ -97,7 +110,13 @@ export const SubtractButton = styled.button`
   }
 `;
 
-export const QuantityInput = styled.input`
+export const QuantityInput = styled(Input)`
+  height: 32px;
+  width: 36px;
+  border-radius: 0;
+`;
+
+export const QuantityInput2 = styled.input`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,7 +145,18 @@ export const QuantityInput = styled.input`
   }
 `;
 
-export const AddButton = styled.button`
+export const AddButton = styled(Button)`
+  background-color: #333;
+  border-radius: 0 6px 6px 0;
+  padding: 4px 8px;
+  width: 34px;
+
+  &:hover {
+    background-color: #333333dd !important;
+  }
+`;
+
+export const AddButton2 = styled.button`
   position: relative;
   width: 30px;
   height: 32px;

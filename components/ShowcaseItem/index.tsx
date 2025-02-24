@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { Col } from 'antd';
 import ProductCard from '../ProductCard';
 import { Product } from '@/interfaces/Product';
-import { CartInterface } from '@/interfaces/CartInterface';
 
 interface ShowcaseItemProps {
   product: Product;

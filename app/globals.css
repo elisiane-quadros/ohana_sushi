@@ -17,7 +17,8 @@
 /* Apply Inria Sans to body and other text elements */
 body {
   font-family: var(--font-inria);
-  background: linear-gradient(135deg, #000 0%, #000 25%, #fff 100%);
+  /* background: linear-gradient(135deg, #000 0%, #000 25%, #fff 100%); */
+  background: #ebebeb;
   min-height: 100vh;
 }
 

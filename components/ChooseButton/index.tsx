@@ -20,6 +20,10 @@ import { CartItemList } from '@/interfaces/CartItemList';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { setCart } from '@/store/features/cart';
+import { Button, Flex } from 'antd';
+import ButtonPrimary from '../ButtonPrimary';
+import Icon from '@mdi/react';
+import { mdiMinusThick, mdiPlusThick } from '@mdi/js';
 
 interface ChooseButtonProps {
   product: Product;
@@ -195,26 +199,35 @@ const ChooseButton = ({ product, productIsInCart }: ChooseButtonProps) => {
   }, []);
 
   return (
-    <ChooseButtonContainer>
-      <InputTopBorder />
-      <ControllersContainer>
-        <SubtractButton onClick={handleSubtractItem}>
-          <Image src={sun} width={28.91} height={32} alt="" />
-          <span>-</span>
-        </SubtractButton>
-        <QuantityInput
-          type="number"
-          value={quantityItem}
-          onChange={handleInputItem}
-          style={{ background: `${productIsInCart ? '#d8161600' : ''}` }}
-        />
-        <AddButton onClick={handleAddItem}>
-          <Image src={sun} width={28.91} height={32} alt="" />
-          <span>+</span>
-        </AddButton>
-      </ControllersContainer>
-      <InputBottomBorder />
-    </ChooseButtonContainer>
+    <Flex>
+      <SubtractButton onClick={handleSubtractItem}>
+        <Icon path={mdiMinusThick} size={0.7} color={'#FFF'} />
+      </SubtractButton>
+      <QuantityInput value={quantityItem} onChange={handleInputItem} />
+      <AddButton type="primary" onClick={handleAddItem}>
+        <Icon path={mdiPlusThick} size={0.7} color={'#FFF'} />
+      </AddButton>
+    </Flex>
+    // <ChooseButtonContainer>
+    //   <InputTopBorder />
+    //   <ControllersContainer>
+    //     <SubtractButton onClick={handleSubtractItem}>
+    //       <Image src={sun} width={28.91} height={32} alt="" />
+    //       <span>-</span>
+    //     </SubtractButton>
+    //     <QuantityInput
+    //       type="number"
+    //       value={quantityItem}
+    //       onChange={handleInputItem}
+    //       style={{ background: `${productIsInCart ? '#d8161600' : ''}` }}
+    //     />
+    //     <AddButton onClick={handleAddItem}>
+    //       <Image src={sun} width={28.91} height={32} alt="" />
+    //       <span>+</span>
+    //     </AddButton>
+    //   </ControllersContainer>
+    //   <InputBottomBorder />
+    // </ChooseButtonContainer>
   );
 };
 

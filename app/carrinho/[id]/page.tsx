@@ -13,11 +13,12 @@ const CartArea = () => {
   const [releaseCart, setReleaseCart] = useState(false);
 
   useEffect(() => {
-    if (cart && urlCartId === cart?.id) {
-      setReleaseCart(true);
-    } else {
-      setReleaseCart(false);
-    }
+    setReleaseCart(true);
+    // if (cart && urlCartId === cart?.id) {
+    //   setReleaseCart(true);
+    // } else {
+    //   setReleaseCart(false);
+    // }
   }, [urlCartId]);
 
   return releaseCart ? (

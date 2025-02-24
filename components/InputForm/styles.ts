@@ -4,13 +4,15 @@ import styled from 'styled-components';
 const { Text } = Typography;
 
 export const StyledInput = styled(Input)`
-  &:hover {
-    border-color: #d8161680;
+  border-radius: 6px;
+
+  &:hover:not(:focus) {
+    border-color: #33333360;
+    box-shadow: 1.5px 1.5px 4px #33333320 !important;
   }
 
   &:focus {
-    border-color: #d8161690;
-    box-shadow: 0 0 0 1.5px #d8161620;
+    border-color: #333 !important;
   }
 `;
 
