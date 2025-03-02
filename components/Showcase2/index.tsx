@@ -116,10 +116,6 @@ const Showcase2 = () => {
     if (productList.length) filterProductsByType();
   }, [productList]);
 
-  console.log(productListByType);
-
-  console.log(cart);
-
   return (
     <Flex vertical align="center" gap={16} style={{ padding: '16px' }}>
       {productListByType.map((productByType) => (

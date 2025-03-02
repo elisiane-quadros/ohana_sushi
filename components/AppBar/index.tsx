@@ -4,7 +4,7 @@ import { AppBarArea, AppBarContainer, HomeButton } from './styles';
 import logo from '../../public/images/logoBig2.png';
 import Image from 'next/image';
 import Cart from '../Cart';
-import { Flex } from 'antd';
+import { Button, Flex } from 'antd';
 import ButtonLink from '../ButtonLink';
 import Icon from '@mdi/react';
 import { mdiInstagram, mdiWhatsapp } from '@mdi/js';
