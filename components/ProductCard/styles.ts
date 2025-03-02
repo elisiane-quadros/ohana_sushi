@@ -8,8 +8,6 @@ export const ProductCardContainer = styled.div`
   background-color: #fff;
   border-radius: 4px;
   width: 300px;
-  /* box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
-   */
   box-shadow: 4px 4px 20px #d8161630;
 `;
 

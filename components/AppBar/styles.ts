@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import styled from 'styled-components';
 
 export const AppBarContainer = styled.div`
@@ -19,4 +20,16 @@ export const AppBarArea = styled.div`
   width: 1376px;
   height: 100px;
   padding: 16px 16px;
+`;
+
+export const HomeButton = styled(Button)`
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+
+  &:hover {
+    background: transparent !important;
+  }
 `;

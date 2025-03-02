@@ -35,9 +35,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <ReduxAndAppProvider>
-          <Flex vertical style={{ marginTop: '100px' }}>
-            {children}
-          </Flex>
+          <Flex vertical>{children}</Flex>
         </ReduxAndAppProvider>
       </body>
     </html>

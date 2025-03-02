@@ -1,12 +1,11 @@
-import Icon from '@mdi/react';
 import {
   AddressAndPaymentContainer,
   AddressCardContainer,
   CartResumeContainer,
-  PaymentMethodFormContainer,
 } from './styles';
 import useResponsive from '@/hooks/useResponsive';
 import AddressForm from './AddressForm';
+import PaymentMethodForm from './PaymentMethodForm';
 
 const CartForm = () => {
   const { isMdDown } = useResponsive();
@@ -15,9 +14,7 @@ const CartForm = () => {
     <AddressCardContainer gap={16} vertical={isMdDown}>
       <AddressAndPaymentContainer>
         <AddressForm />
-        <PaymentMethodFormContainer>
-          <span>payment</span>
-        </PaymentMethodFormContainer>
+        <PaymentMethodForm />
       </AddressAndPaymentContainer>
       <CartResumeContainer>
         <span>cart</span>

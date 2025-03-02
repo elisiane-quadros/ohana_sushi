@@ -2,24 +2,17 @@
 
 import { v4 as uuidv4 } from 'uuid';
 
-import sun from '../../public/images/sun.png';
-
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
-import {
-  AddButton,
-  ChooseButtonContainer,
-  ControllersContainer,
-  InputBottomBorder,
-  InputTopBorder,
-  QuantityInput,
-  SubtractButton,
-} from './styles';
+import { AddButton, QuantityInput, SubtractButton } from './styles';
 import Image from 'next/image';
 import { Product } from '@/interfaces/Product';
 import { CartItemList } from '@/interfaces/CartItemList';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { setCart } from '@/store/features/cart';
+import { Flex } from 'antd';
+import Icon from '@mdi/react';
+import { mdiMinusThick, mdiPlusThick } from '@mdi/js';
 
 interface ChooseButtonProps {
   product: Product;
@@ -195,26 +188,27 @@ const ChooseButton = ({ product, productIsInCart }: ChooseButtonProps) => {
   }, []);
 
   return (
-    <ChooseButtonContainer>
-      <InputTopBorder />
-      <ControllersContainer>
-        <SubtractButton onClick={handleSubtractItem}>
-          <Image src={sun} width={28.91} height={32} alt="" />
-          <span>-</span>
-        </SubtractButton>
-        <QuantityInput
-          type="number"
-          value={quantityItem}
-          onChange={handleInputItem}
-          style={{ background: `${productIsInCart ? '#d8161600' : ''}` }}
-        />
-        <AddButton onClick={handleAddItem}>
-          <Image src={sun} width={28.91} height={32} alt="" />
-          <span>+</span>
-        </AddButton>
-      </ControllersContainer>
-      <InputBottomBorder />
-    </ChooseButtonContainer>
+    <Flex align="flex-end">
+      {quantityItem > 0 && (
+        <>
+          <SubtractButton onClick={handleSubtractItem}>
+            <Icon path={mdiMinusThick} size={0.7} color={'#333'} />
+          </SubtractButton>
+          <QuantityInput
+            value={quantityItem}
+            onChange={handleInputItem}
+            style={{ color: '#333', fontWeight: 700, textAlign: 'center' }}
+          />
+        </>
+      )}
+      <AddButton
+        type="primary"
+        onClick={handleAddItem}
+        $isInCart={quantityItem > 0}
+      >
+        <Icon path={mdiPlusThick} size={0.7} color={'#333'} />
+      </AddButton>
+    </Flex>
   );
 };
 

@@ -1,3 +1,4 @@
+import { Button, Input } from 'antd';
 import styled from 'styled-components';
 
 export const ChooseButtonContainer = styled.div`
@@ -46,7 +47,21 @@ export const InputBottomBorder = styled.div`
   );
 `;
 
-export const SubtractButton = styled.button`
+export const SubtractButton = styled(Button)`
+  background-color: #fff; // #333;
+  border-radius: 4px 0 0 4px;
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  width: 32px;
+  height: 24px;
+
+  &:hover {
+    background-color: #33333340 !important;
+    border-color: #333333dd !important;
+  }
+`;
+
+export const SubtractButton2 = styled.button`
   position: relative;
   width: 32px;
   height: 32px;
@@ -97,7 +112,21 @@ export const SubtractButton = styled.button`
   }
 `;
 
-export const QuantityInput = styled.input`
+export const QuantityInput = styled(Input)`
+  height: 24px;
+  width: 36px;
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  line-height: 1;
+
+  &:hover {
+    border-color: #333333dd !important;
+  }
+`;
+
+export const QuantityInput2 = styled.input`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,7 +155,25 @@ export const QuantityInput = styled.input`
   }
 `;
 
-export const AddButton = styled.button`
+interface isInCartProps {
+  $isInCart: boolean;
+}
+
+export const AddButton = styled(Button)<isInCartProps>`
+  background-color: #fff;
+  border-radius: ${(props) => (props.$isInCart ? '0 6px 6px 0' : '6px')};
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  width: 34px;
+  height: 24px;
+
+  &:hover {
+    background-color: #33333340 !important;
+    border-color: #333333dd !important;
+  }
+`;
+
+export const AddButton2 = styled.button`
   position: relative;
   width: 30px;
   height: 32px;
