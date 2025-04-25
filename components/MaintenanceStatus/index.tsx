@@ -1,17 +1,18 @@
-import { Button, Flex, Typography } from 'antd';
-import { PreviewStatusContainer, WhatsappButton } from './styles';
+import { Flex, Typography } from 'antd';
+import { MaintenanceStatusContainer } from './styles';
 import Icon from '@mdi/react';
 import { mdiWhatsapp } from '@mdi/js';
 import { IoLogoWhatsapp } from 'react-icons/io';
 import useResponsive from '@/hooks/useResponsive';
 import { IoConstruct } from 'react-icons/io5';
+import ButtonWhatsapp from '../ButtonWhatsapp';
 
-const PreviewStatus = () => {
+const MaintenanceStatus = () => {
   const { Title, Text } = Typography;
   const { isXs } = useResponsive();
 
   return (
-    <PreviewStatusContainer align="center" justify="center">
+    <MaintenanceStatusContainer align="center" justify="center">
       <Flex
         vertical
         align="center"
@@ -49,37 +50,10 @@ const PreviewStatus = () => {
           >
             Enquanto isso, você pode pedir o nosso menu pelo whatsapp
           </Text>
-          <WhatsappButton>
-            <Flex
-              align="center"
-              justify="center"
-              gap={8}
-              style={{
-                width: '180px',
-                background: '#00BB2D',
-                padding: 'none',
-                borderRadius: '11px',
-                height: '44px',
-                border: '2px solid #FFF',
-              }}
-            >
-              <IoLogoWhatsapp style={{ width: '26px', height: '26px' }} />
-              <a
-                href="https://wa.me/5551996090597?text=Olá,%20estou%20vindo%20do%20www.ohanasushi.com.br%20e%20quero%20fazer%20um%20pedido"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: 'inherit',
-                  textDecoration: 'none',
-                  fontSize: '22px',
-                  fontWeight: 600,
-                  paddingBottom: '2px',
-                }}
-              >
-                Whatsapp
-              </a>
-            </Flex>
-          </WhatsappButton>
+          <ButtonWhatsapp
+            whatsappNumber="51996090597"
+            whatsappText="Olá,%20estou%20vindo%20do%20www.ohanasushi.com.br%20e%20quero%20fazer%20um%20pedido"
+          />
           <Flex
             align={isXs ? 'flex-start' : 'center'}
             justify={isXs ? 'center' : 'flex-start'}
@@ -99,8 +73,8 @@ const PreviewStatus = () => {
           </Flex>
         </Flex>
       </Flex>
-    </PreviewStatusContainer>
+    </MaintenanceStatusContainer>
   );
 };
 
-export default PreviewStatus;
+export default MaintenanceStatus;

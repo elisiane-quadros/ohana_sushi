@@ -1,0 +1,103 @@
+.show-case-flex .ant-row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+}
+
+.filter-button {
+  display: flex;
+}
+
+.filter-button .ant-radio-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 100%;
+  border-color: #d8161660 !important;
+  color: #d81616 !important;
+  font-family: var(--montserrat), sans-serif;
+}
+
+.filter-button .ant-radio-button-wrapper:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.filter-button .ant-radio-button-wrapper:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.filter-button .ant-radio-button-wrapper:hover {
+  color: #d81616 !important;
+  border-color: #d81616 !important;
+  box-shadow: 1.5px 1.5px 4px #d8161620 !important;
+}
+
+.filter-button .ant-radio-button-wrapper-checked {
+  background-color: #d81616 !important;
+  color: #fff !important;
+  border-color: #d81616 !important;
+  box-shadow: 1.5px 1.5px 4px #d8161620 !important;
+}
+
+.filter-button .ant-radio-button-wrapper-checked:hover {
+  background-color: #d81616 !important;
+  color: #fff !important;
+  border-color: #d81616 !important;
+  box-shadow: 1.5px 1.5px 4px #33333320 !important;
+}
+
+.filter-button
+  .ant-radio-button-wrapper-checked:not(
+    .ant-radio-button-wrapper-disabled
+  )::before {
+  background-color: #000 !important;
+}
+
+.filter-button .ant-radio-button-wrapper:not(:first-child)::before {
+  background-color: #d8161660 !important;
+}
+
+.showcase-carousel .slick-arrow {
+  color: #d81616 !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  opacity: 1 !important;
+  top: calc(50% - 18px) !important;
+}
+
+.showcase-carousel .slick-arrow::after {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.showcase-carousel .slick-next::after {
+  border-inline-width: 6px 0 !important;
+  border-block-width: 6px 0 !important;
+}
+
+.showcase-carousel .slick-prev::after {
+  border-inline-width: 6px 0 !important;
+  border-block-width: 6px 0 !important;
+}
+
+.showcase-carousel .slick-dots-bottom li {
+  width: 72px !important;
+}
+
+.showcase-carousel .slick-dots-bottom button {
+  height: 8px !important;
+}
+
+.showcase-carousel .slick-dots-bottom .slick-active button {
+  background: #d81616 !important;
+}
+
+.showcase-carousel .slick-dots-bottom:not(.slick-active) button {
+  background: #d81616 !important;
+}

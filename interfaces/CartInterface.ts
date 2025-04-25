@@ -1,3 +1,4 @@
+import { CartInterfaceStatus } from './CartInterfaceStatus';
 import { CartItemList } from './CartItemList';
 
 export interface CartInterface {

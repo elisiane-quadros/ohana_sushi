@@ -1,7 +1,7 @@
 import { Flex } from 'antd';
 import styled from 'styled-components';
 
-export const AddressCardContainer = styled(Flex)`
+export const CardContainer = styled(Flex)`
   padding: 0 16px;
   width: 100%;
 `;
@@ -14,6 +14,7 @@ export const AddressAndPaymentContainer = styled(Flex)`
 `;
 
 export const CartResumeContainer = styled(Flex)`
+  flex-direction: column;
   background: #fff;
   border-radius: 4px;
   padding: 16px;

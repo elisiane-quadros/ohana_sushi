@@ -1,5 +1,5 @@
 import { Product } from '@/interfaces/Product';
-import example from '../../public/images/example.png';
+import example from '../../public/images/teste2.png';
 
 const productList: Product[] = [
   {
@@ -246,6 +246,270 @@ const productList: Product[] = [
     image: example,
     price: 99.9,
     type: 'COMBO',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'lâminas',
+        quantity: 12,
+      },
+      {
+        id: 2,
+        name: 'nigueris salmão',
+        quantity: 4,
+      },
+      {
+        id: 3,
+        name: 'gunkan fila',
+        quantity: 2,
+      },
+      {
+        id: 4,
+        name: 'ura fila',
+        quantity: 8,
+      },
+      {
+        id: 5,
+        name: 'hosso fila',
+        quantity: 8,
+      },
+      {
+        id: 6,
+        name: 'hot',
+        quantity: 10,
+      },
+      {
+        id: 7,
+        name: 'temaki fila',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 9,
+    title: 'Porção 1',
+    image: example,
+    price: 99.9,
+    type: 'PORTION',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'lâminas',
+        quantity: 12,
+      },
+      {
+        id: 2,
+        name: 'nigueris salmão',
+        quantity: 4,
+      },
+      {
+        id: 3,
+        name: 'gunkan fila',
+        quantity: 2,
+      },
+      {
+        id: 4,
+        name: 'ura fila',
+        quantity: 8,
+      },
+      {
+        id: 5,
+        name: 'hosso fila',
+        quantity: 8,
+      },
+      {
+        id: 6,
+        name: 'hot',
+        quantity: 10,
+      },
+      {
+        id: 7,
+        name: 'temaki fila',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 10,
+    title: 'Porção 2',
+    image: example,
+    price: 99.9,
+    type: 'PORTION',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'lâminas',
+        quantity: 12,
+      },
+      {
+        id: 2,
+        name: 'nigueris salmão',
+        quantity: 4,
+      },
+      {
+        id: 3,
+        name: 'gunkan fila',
+        quantity: 2,
+      },
+      {
+        id: 4,
+        name: 'ura fila',
+        quantity: 8,
+      },
+      {
+        id: 5,
+        name: 'hosso fila',
+        quantity: 8,
+      },
+      {
+        id: 6,
+        name: 'hot',
+        quantity: 10,
+      },
+      {
+        id: 7,
+        name: 'temaki fila',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 11,
+    title: 'Porção 3',
+    image: example,
+    price: 99.9,
+    type: 'PORTION',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'lâminas',
+        quantity: 12,
+      },
+      {
+        id: 2,
+        name: 'nigueris salmão',
+        quantity: 4,
+      },
+      {
+        id: 3,
+        name: 'gunkan fila',
+        quantity: 2,
+      },
+      {
+        id: 4,
+        name: 'ura fila',
+        quantity: 8,
+      },
+      {
+        id: 5,
+        name: 'hosso fila',
+        quantity: 8,
+      },
+      {
+        id: 6,
+        name: 'hot',
+        quantity: 10,
+      },
+      {
+        id: 7,
+        name: 'temaki fila',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 12,
+    title: 'Porção 4',
+    image: example,
+    price: 99.9,
+    type: 'PORTION',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'lâminas',
+        quantity: 12,
+      },
+      {
+        id: 2,
+        name: 'nigueris salmão',
+        quantity: 4,
+      },
+      {
+        id: 3,
+        name: 'gunkan fila',
+        quantity: 2,
+      },
+      {
+        id: 4,
+        name: 'ura fila',
+        quantity: 8,
+      },
+      {
+        id: 5,
+        name: 'hosso fila',
+        quantity: 8,
+      },
+      {
+        id: 6,
+        name: 'hot',
+        quantity: 10,
+      },
+      {
+        id: 7,
+        name: 'temaki fila',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 13,
+    title: 'Porção 5',
+    image: example,
+    price: 99.9,
+    type: 'PORTION',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'lâminas',
+        quantity: 12,
+      },
+      {
+        id: 2,
+        name: 'nigueris salmão',
+        quantity: 4,
+      },
+      {
+        id: 3,
+        name: 'gunkan fila',
+        quantity: 2,
+      },
+      {
+        id: 4,
+        name: 'ura fila',
+        quantity: 8,
+      },
+      {
+        id: 5,
+        name: 'hosso fila',
+        quantity: 8,
+      },
+      {
+        id: 6,
+        name: 'hot',
+        quantity: 10,
+      },
+      {
+        id: 7,
+        name: 'temaki fila',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 14,
+    title: 'Porção 6',
+    image: example,
+    price: 99.9,
+    type: 'PORTION',
     ingredientList: [
       {
         id: 1,

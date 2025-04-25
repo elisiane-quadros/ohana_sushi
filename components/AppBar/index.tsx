@@ -1,10 +1,10 @@
 'use client';
 
 import { AppBarArea, AppBarContainer, HomeButton } from './styles';
-import logo from '../../public/images/logoBig2.png';
+import logo from '../../public/images/newLogoB.png';
 import Image from 'next/image';
 import Cart from '../Cart';
-import { Button, Flex } from 'antd';
+import { Flex } from 'antd';
 import ButtonLink from '../ButtonLink';
 import Icon from '@mdi/react';
 import { mdiInstagram, mdiWhatsapp } from '@mdi/js';
@@ -32,11 +32,12 @@ const AppBar = () => {
         <Flex align="center" gap={24}>
           <Link href={'/'}>
             <HomeButton>
-              <Image src={logo} width={80} height={66.03} alt="Ohana Sushi" />
+              <Image src={logo} width={80} height={80} alt="Ohana Sushi" />
             </HomeButton>
           </Link>
           <Flex align="center" gap={isXs ? 4 : 16}>
             <ButtonLink
+              isAppLink
               icon={<Icon path={mdiWhatsapp} size={1.2} />}
               style={{ fontWeight: 600, fontSize: '16px' }}
             >
@@ -50,6 +51,7 @@ const AppBar = () => {
               </a>
             </ButtonLink>
             <ButtonLink
+              isAppLink
               icon={<Icon path={mdiInstagram} size={1.2} />}
               style={{ fontWeight: 600, fontSize: '16px' }}
             >
@@ -64,7 +66,7 @@ const AppBar = () => {
             </ButtonLink>
           </Flex>
         </Flex>
-        {showCart ? <Cart /> : null}
+        {/* {showCart ? <Cart /> : null} */}
       </AppBarArea>
     </AppBarContainer>
   );

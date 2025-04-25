@@ -1,31 +1,40 @@
-import { Collapse, Flex, Typography } from 'antd';
-import { useEffect, useState } from 'react';
-import productList from './productList';
-import { Product } from '@/interfaces/Product';
-import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
-import Image from 'next/image';
-import ChooseButton from '../ChooseButton';
-import { CartInterface } from '@/interfaces/CartInterface';
-import { useAppSelector } from '@/hooks/redux';
-import { Ingredient } from '@/interfaces/Ingredient';
+import { Carousel, Col, Flex, Radio, RadioChangeEvent, Row } from 'antd';
+import {
+  ProductTypeTitle,
+  ProductTypeTitleFlex,
+  SearchAnFilterFlex,
+  ShowcaseContainerFlex,
+  ShowCaseFlex,
+} from './styles';
 
-// 'COMBO' | 'PORTION' | 'ITEM' | 'DRINK' | 'OTHER'
+import './styles.css';
+import Icon from '@mdi/react';
+import { mdiCartOutline, mdiMagnify } from '@mdi/js';
+import InputForm from '../InputForm';
+import { Product } from '@/interfaces/Product';
+import { ChangeEvent, useEffect, useState } from 'react';
+import productList from './productList';
+import ProductCard2 from '../ProductCard2';
 
 interface ProductListByType {
   id: number;
+  type: ProductType;
   typeName: string;
   productLists: Product[];
   order: number;
 }
 
 const Showcase2 = () => {
-  const { Title, Text } = Typography;
-  const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
-
-  const [productIsInCart, setProductIsInCart] = useState(false);
   const [productListByType, setProductListByType] = useState<
     ProductListByType[]
   >([]);
+  const [productListByTypeFiltered, setProductListByTypeFiltered] = useState<
+    ProductListByType[]
+  >([]);
+  // const [isSticky, setIsSticky] = useState(false);
+  const [selectedProductType, setSelectedProductType] = useState('COMBO');
+
+  const radioButtonStyle = { fontSize: '1.2rem' };
 
   const filterProductsByType = () => {
     let newComboList: Product[] = [];
@@ -58,13 +67,20 @@ const Showcase2 = () => {
       let newProductListByType: ProductListByType[] = [];
       if (newComboList.length)
         newProductListByType = [
-          { id: 1, typeName: 'Combos', productLists: newComboList, order: 1 },
+          {
+            id: 1,
+            type: 'COMBO',
+            typeName: 'Combos',
+            productLists: newComboList,
+            order: 1,
+          },
         ];
       if (newPortionList.length)
         newProductListByType = [
           ...newProductListByType,
           {
             id: 2,
+            type: 'PORTION',
             typeName: 'Porções',
             productLists: newPortionList,
             order: 2,
@@ -73,215 +89,240 @@ const Showcase2 = () => {
       if (newItemList.length)
         newProductListByType = [
           ...newProductListByType,
-          { id: 3, typeName: 'Unidades', productLists: newItemList, order: 3 },
+          {
+            id: 3,
+            type: 'ITEM',
+            typeName: 'Unidades',
+            productLists: newItemList,
+            order: 3,
+          },
         ];
       if (newDrinkList.length)
         newProductListByType = [
           ...newProductListByType,
-          { id: 4, typeName: 'Bebidas', productLists: newDrinkList, order: 4 },
+          {
+            id: 4,
+            type: 'DRINK',
+            typeName: 'Bebidas',
+            productLists: newDrinkList,
+            order: 4,
+          },
         ];
       if (newOtherList.length)
         newProductListByType = [
           ...newProductListByType,
-          { id: 5, typeName: 'Outros', productLists: newOtherList, order: 5 },
+          {
+            id: 5,
+            type: 'OTHER',
+            typeName: 'Outros',
+            productLists: newOtherList,
+            order: 5,
+          },
         ];
 
       newProductListByType.sort((a, b) => a.order - b.order);
 
       setProductListByType(newProductListByType);
+      setProductListByTypeFiltered(newProductListByType);
     });
   };
 
-  const mountIngredientTextList = (ingredientList: Ingredient[]) => {
-    let ingredientTextList = '';
-    ingredientList.map((ingredient, index: number) => {
-      let separator = index === ingredientList.length - 1 ? '.' : ', ';
-      ingredientTextList += `${ingredient.quantity} ${ingredient.name}${separator}`;
-    });
-    return ingredientTextList;
-  };
+  const handleProductType = (e: RadioChangeEvent) => {
+    setSelectedProductType(e.target.value);
 
-  const findProductQuantityInCart = (productId: number) => {
-    if (cart) {
-      const product = cart.cartItemList.find((cil) => cil.id === productId);
-      if (product) {
-        return product.quantity;
-      }
-      return 0;
+    // Find the element with the selected type ID and scroll to it
+    const element = document.getElementById(e.target.value);
+    if (element) {
+      const offset = 100; // Adjust this value based on your header height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
     }
-    return 0;
+  };
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value.toLowerCase();
+    console.log(searchValue);
+    const filteredProductListByType = productListByType.map((productType) => {
+      const filteredProducts = productType.productLists.filter(
+        (product) =>
+          product.title.toLowerCase().includes(searchValue) ||
+          product.ingredientList.some((ingredient) =>
+            ingredient.name.toLowerCase().includes(searchValue),
+          ),
+      );
+      console.log(filteredProducts);
+      return { ...productType, productLists: filteredProducts };
+    });
+    setProductListByTypeFiltered(filteredProductListByType);
   };
 
   useEffect(() => {
     if (productList.length) filterProductsByType();
   }, [productList]);
 
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -70% 0px', // Triggers closer to the top of viewport
+      threshold: [0, 0.2, 0.5, 0.8, 1], // Multiple thresholds for smoother detection
+    };
+
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      // Get the most visible section
+      const mostVisible = entries.reduce((prev, current) => {
+        return prev && prev.intersectionRatio > current.intersectionRatio
+          ? prev
+          : current;
+      });
+
+      if (mostVisible && mostVisible.isIntersecting) {
+        const productType = mostVisible.target.id;
+        setSelectedProductType(productType);
+      }
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    // Observe all product type sections
+    productListByType.forEach((productType) => {
+      const element = document.getElementById(productType.type);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    // Cleanup
+    return () => {
+      productListByType.forEach((productType) => {
+        const element = document.getElementById(productType.type);
+        if (element) {
+          observer.unobserve(element);
+        }
+      });
+    };
+  }, [productListByType]);
+
+  console.log(productListByTypeFiltered);
+
   return (
-    <Flex vertical align="center" gap={16} style={{ padding: '16px' }}>
-      {productListByType.map((productByType) => (
-        <Collapse
-          key={productByType.id}
-          bordered={false}
-          defaultActiveKey={['1']}
-          style={{ width: '1448px', background: 'transparent' }}
-          items={[
-            {
-              key: '1',
-              label: <span>{productByType.typeName}</span>,
-              children: (
-                <Flex
-                  gap={4}
-                  justify="space-evenly"
-                  align="stretch"
-                  style={{ wordWrap: 'break-word', flexWrap: 'wrap' }}
-                >
-                  {productByType.productLists.map((product: Product) => (
-                    <Flex
-                      vertical
-                      justify="space-between"
-                      gap={12}
-                      key={product.id}
+    <ShowcaseContainerFlex vertical align="center">
+      <Flex
+        style={{
+          position: 'sticky',
+          top: 0,
+          width: '100%',
+          background: 'rgba(0, 0, 0, 0.85)',
+          boxShadow: '1.5px 1.5px 4px #d8161620 !important',
+          zIndex: 1000,
+          backdropFilter: 'blur(8px)', // Optional: adds a nice blur effect
+        }}
+        justify="center"
+        align="center"
+      >
+        <SearchAnFilterFlex align="center" className="show-case-flex">
+          <Row gutter={[16, 16]} style={{ width: '100%' }}>
+            <Col span={6}>
+              <InputForm
+                placeholder="Buscar"
+                // suffix={<Icon path={mdiMagnify} size={1} color="#d81616" />}
+                redStyled
+                onChange={handleSearch}
+                allowClear
+              />
+            </Col>
+            <Col span={12}>
+              <Radio.Group
+                value={selectedProductType}
+                className="filter-button"
+                onChange={handleProductType}
+              >
+                <Radio.Button value="COMBO" style={radioButtonStyle}>
+                  Combos
+                </Radio.Button>
+                <Radio.Button value="PORTION" style={radioButtonStyle}>
+                  Porções
+                </Radio.Button>
+                <Radio.Button value="DRINK  " style={radioButtonStyle}>
+                  Bebidas
+                </Radio.Button>
+              </Radio.Group>
+            </Col>
+            <Col span={6}>
+              <Flex justify="end" align="center" style={{ width: '100%' }}>
+                <Icon path={mdiCartOutline} size={1.5} color="#d81616" />
+              </Flex>
+            </Col>
+          </Row>
+        </SearchAnFilterFlex>
+      </Flex>
+      <ShowCaseFlex className="show-case-flex" vertical gap={32}>
+        {productListByTypeFiltered.map((productByType) => (
+          <Flex
+            vertical
+            gap={16}
+            // style={{ paddingLeft: '8px' }}
+            key={productByType.id}
+          >
+            {productByType.productLists.length ? (
+              <ProductTypeTitleFlex id={productByType.type}>
+                <ProductTypeTitle level={2}>
+                  {productByType.typeName}
+                </ProductTypeTitle>
+              </ProductTypeTitleFlex>
+            ) : null}
+
+            <Carousel
+              arrows={productByType.productLists.length > 6}
+              dots={productByType.productLists.length > 6}
+              draggable
+              infinite={false}
+              className="showcase-carousel"
+            >
+              {/* Group products into chunks of 6 */}
+              {Array.from({
+                length: Math.ceil(productByType.productLists.length / 6),
+              }).map((_, index) => {
+                const start = index * 6;
+                const productsChunk = productByType.productLists.slice(
+                  start,
+                  start + 6,
+                );
+
+                return (
+                  <div key={index}>
+                    <Row
+                      gutter={[16, 16]}
                       style={{
-                        background: '#FFF',
-                        padding: '12px',
-                        width: '280px',
+                        width: '100%',
+                        padding: '0 48px 48px 48px',
                       }}
                     >
-                      <Flex vertical gap={8}>
-                        <Flex vertical>
-                          <Title
-                            level={5}
-                            style={{ marginBottom: 0, lineHeight: 1.2 }}
-                          >
-                            {product.title}
-                          </Title>
-                          <Text
-                            style={{
-                              fontSize: '0.8rem',
-                              color: '#555',
-                              lineHeight: 1.1,
-                            }}
-                          >
-                            {product.type === 'COMBO'
-                              ? `${calculateComboTotalItems(product.ingredientList)} peças`
-                              : ''}
-                          </Text>
-                        </Flex>
-                        <Image
-                          src={product.image}
-                          alt="example"
-                          height={191.7} // 213
-                          width={255.6} // 284
-                        />
-                        <Flex vertical>
-                          <Text
-                            style={{
-                              lineHeight: 1.2,
-                              color: '#333333aa',
-                              fontSize: '0.8rem',
-                            }}
-                          >
-                            {mountIngredientTextList(product.ingredientList)}
-                            {/* 10 hot camarão empanado, 10 hot alho poró, 10 hot
-                            cove, 10 hot doritos, 10 hot cheddar, 10 hot geleia
-                            de pimenta, 10 hot saladi. */}
-                          </Text>
-                          {/* {product.ingredientList.map((ingredient) => (
-                            <Text
-                              key={ingredient.id}
-                              style={{
-                                lineHeight: 1.2,
-                                color: '#555',
-                                fontSize: '0.8rem',
-                              }}
-                            >{`${ingredient.quantity.toString().padStart(2, '0')} ${ingredient.name}`}</Text>
-                          ))} */}
-                        </Flex>
-                      </Flex>
-                      <Flex
-                        justify="space-between"
-                        align="flex-end"
-                        style={{ height: '58px' }}
-                      >
-                        <Flex vertical>
-                          <Text
-                            style={{
-                              lineHeight: 1,
-                              color: '#555',
-                              fontWeight: 600,
-                              fontSize: '0.8rem',
-                            }}
-                          >
-                            unidade
-                          </Text>
-                          <Title
-                            level={5}
-                            style={{
-                              marginBottom: 0,
-                              marginTop: 0,
-                              lineHeight: 1.2,
-                            }}
-                          >
-                            {new Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            }).format(product.price)}
-                          </Title>
-                        </Flex>
-                        <Flex vertical align="flex-end" gap={6}>
-                          {findProductQuantityInCart(product.id) ? (
-                            <Flex vertical gap={2}>
-                              <Text
-                                style={{
-                                  lineHeight: 1,
-                                  color: '#555',
-                                  fontWeight: 600,
-                                  fontSize: '0.8rem',
-                                  textAlign: 'end',
-                                }}
-                              >
-                                adicionado
-                              </Text>
-                              <Text
-                                style={{
-                                  lineHeight: 1,
-                                  color: '#333',
-                                  fontWeight: 600,
-                                  fontSize: '0.8rem',
-                                  textAlign: 'end',
-                                }}
-                              >
-                                {new Intl.NumberFormat('pt-BR', {
-                                  style: 'currency',
-                                  currency: 'BRL',
-                                }).format(
-                                  product.price *
-                                    findProductQuantityInCart(product.id),
-                                )}
-                              </Text>
-                            </Flex>
-                          ) : null}
-
-                          <ChooseButton
-                            product={product}
-                            productIsInCart={productIsInCart}
-                          />
-                        </Flex>
-                      </Flex>
-                    </Flex>
-                  ))}
-                </Flex>
-              ),
-            },
-            // {
-            //   key: '2',
-            //   label: <span>{productByType.typeName}</span>,
-            //   children: <span>Combo 2</span>,
-            // },
-          ]}
-        />
-      ))}
-    </Flex>
+                      {productsChunk.map((product) => (
+                        <Col
+                          xl={8}
+                          lg={12}
+                          sm={24}
+                          xs={24}
+                          key={product.id}
+                          style={{ display: 'flex' }}
+                        >
+                          <ProductCard2 product={product} />
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                );
+              })}
+            </Carousel>
+          </Flex>
+        ))}
+      </ShowCaseFlex>
+    </ShowcaseContainerFlex>
   );
 };
 

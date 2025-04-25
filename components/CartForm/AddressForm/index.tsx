@@ -1,103 +1,287 @@
-import { Flex, Typography } from 'antd';
-import { ChangeEvent, useState } from 'react';
-import { AddressFormContainer } from './styles';
+import { Alert, Col, Flex, Row, Typography } from 'antd';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { AddressFormContainer, ErrorMessage } from './styles';
 import Icon from '@mdi/react';
 import { mdiMapMarkerRadiusOutline } from '@mdi/js';
 import InputForm from '@/components/InputForm';
+import { AddressProps } from '@/interfaces/AddressForm';
+import { IoIosContact } from 'react-icons/io';
+import { getZipCodeService } from '@/services/api';
+import { AddressFormError } from '@/interfaces/AddressFormError';
 
-const AddressForm = () => {
+interface AddressFormProps {
+  addressForm: AddressProps;
+  onAddressForm: (addressForm: AddressProps) => void;
+  addressFormError: AddressFormError;
+  onAddressFormError: Dispatch<SetStateAction<AddressFormError>>;
+}
+
+const AddressForm = ({
+  addressForm,
+  onAddressForm,
+  addressFormError,
+  onAddressFormError,
+}: AddressFormProps) => {
   const { Title } = Typography;
 
-  const [streetName, setStreetName] = useState('');
-  const [number, setNumber] = useState('');
-  const [complement, setComplement] = useState('');
-  const [neighborhood, setNeighborhood] = useState('');
-  const [city, setCity] = useState('');
-  const [reference, setReference] = useState('');
+  const [showZipCodeErrorMessage, setShowZipCodeErrorMessage] = useState(false);
+
+  const formatPhoneNumber = (value: string) => {
+    // Remove tudo que não é número
+    const cleaned = value.replace(/\D/g, '');
+
+    // Se não houver números, retorna string vazia
+    if (cleaned.length === 0) {
+      return '';
+    }
+
+    // Aplica a máscara (XX) XXXXX-XXXX
+    const match = cleaned.match(/^(\d{0,2})(\d{0,5})(\d{0,4})$/);
+
+    if (!match) return '';
+
+    const formatted = !match[1]
+      ? ''
+      : !match[2]
+        ? `(${match[1]}`
+        : !match[3]
+          ? `(${match[1]}) ${match[2]}`
+          : `(${match[1]}) ${match[2]}-${match[3]}`;
+
+    return formatted;
+  };
+
+  const handlePhone = (event: ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(event.target.value);
+    onAddressForm({ ...addressForm, phone: formatted });
+
+    if (formatted) {
+      onAddressFormError({
+        ...addressFormError,
+        phone: false,
+      });
+    }
+  };
+
+  const getZipCodeRequest = async (zipCode: string) => {
+    const newZipCodeState = zipCode.replace(/(\d{5})(\d{3})/, '$1-$2');
+    onAddressForm({
+      ...addressForm,
+      zipCode: newZipCodeState,
+    });
+    try {
+      const response = await getZipCodeService(zipCode);
+      if (response?.erro) {
+        setShowZipCodeErrorMessage(true);
+        return;
+      }
+
+      const newAddressForm = {
+        ...addressForm,
+        zipCode: newZipCodeState,
+        streetName: response?.logradouro ? response?.logradouro : '',
+        neighborhood: response?.bairro ? response?.bairro : '',
+        city: response?.localidade ? response?.localidade : '',
+      };
+
+      onAddressForm(newAddressForm);
+      setShowZipCodeErrorMessage(false);
+      onAddressFormError({
+        ...addressFormError,
+        streetName: false,
+        neighborhood: false,
+        city: false,
+      });
+    } catch (error: any) {
+      setShowZipCodeErrorMessage(true);
+    }
+  };
+
+  const handleZipCode = (event: ChangeEvent<HTMLInputElement>) => {
+    const newZipCode = event.target.value.replace(/\D/g, '');
+    setShowZipCodeErrorMessage(false);
+    if (newZipCode.length < 8) {
+      onAddressForm({
+        ...addressForm,
+        zipCode: newZipCode.replace(/(\d{5})(\d{3})/, '$1-$2'),
+      });
+      return;
+    }
+
+    if (newZipCode.length === 8) {
+      getZipCodeRequest(newZipCode);
+    }
+  };
+
+  const zipCodeAlertDescription = () => (
+    <Flex vertical gap={4}>
+      <InputForm
+        label="Buscar endereço por CEP"
+        value={addressForm.zipCode}
+        onChange={handleZipCode}
+      />
+      {showZipCodeErrorMessage ? (
+        <ErrorMessage>CEP inválido!</ErrorMessage>
+      ) : (
+        <span style={{ width: '100%', height: '18.84px' }} />
+      )}
+    </Flex>
+  );
 
   const handleStreetName = (event: ChangeEvent<HTMLInputElement>) => {
     const newStreetName = event.target.value;
-    setStreetName(newStreetName);
+    onAddressForm({ ...addressForm, streetName: newStreetName });
+
+    if (newStreetName) {
+      onAddressFormError({
+        ...addressFormError,
+        streetName: false,
+      });
+    }
   };
 
   const handleNumber = (event: ChangeEvent<HTMLInputElement>) => {
     const newNumber = event.target.value;
-    setNumber(newNumber);
+    onAddressForm({ ...addressForm, number: newNumber });
+
+    if (newNumber) {
+      onAddressFormError({
+        ...addressFormError,
+        number: false,
+      });
+    }
   };
 
   const handleComplement = (event: ChangeEvent<HTMLInputElement>) => {
     const newComplement = event.target.value;
-    setComplement(newComplement);
+    onAddressForm({ ...addressForm, complement: newComplement });
   };
 
   const handleNeighborhood = (event: ChangeEvent<HTMLInputElement>) => {
     const newNeighborhood = event.target.value;
-    setNeighborhood(newNeighborhood);
+    onAddressForm({ ...addressForm, neighborhood: newNeighborhood });
+
+    if (newNeighborhood) {
+      onAddressFormError({
+        ...addressFormError,
+        neighborhood: false,
+      });
+    }
   };
 
   const handleCity = (event: ChangeEvent<HTMLInputElement>) => {
     const newCity = event.target.value;
-    setCity(newCity);
+    onAddressForm({ ...addressForm, city: newCity });
+
+    if (newCity) {
+      onAddressFormError({
+        ...addressFormError,
+        city: false,
+      });
+    }
   };
 
   const handleReference = (event: ChangeEvent<HTMLInputElement>) => {
     const newReference = event.target.value;
-    setReference(newReference);
+    onAddressForm({ ...addressForm, reference: newReference });
   };
+
+  console.log('phone: ', addressForm.phone);
 
   return (
     <AddressFormContainer gap={8} vertical>
       <Flex align="center" gap={8}>
-        <Icon path={mdiMapMarkerRadiusOutline} size={1} color="#d81616" />
+        <IoIosContact style={{ fontSize: '24px', color: '#d81616' }} />
         <Title level={5} style={{ marginBottom: 0 }}>
+          Contato:
+        </Title>
+      </Flex>
+      <Row gutter={8}>
+        <Col span={24}>
+          <InputForm
+            label="Whatsapp *"
+            value={addressForm.phone}
+            onChange={handlePhone}
+            maxLength={15}
+            errorMessage={
+              !addressForm.phone.length
+                ? 'Número do whatsapp é obrigatório'
+                : 'Número do whatsapp inválido'
+            }
+            showErrorMessage={addressFormError.phone}
+          />
+        </Col>
+      </Row>
+      <Flex align="center" gap={8} style={{ width: 'fit-content' }}>
+        <Icon path={mdiMapMarkerRadiusOutline} size={1} color="#d81616" />
+        <Title level={5} style={{ marginBottom: 0, wordBreak: 'normal' }}>
           Endereço:
         </Title>
       </Flex>
-      <Flex vertical gap={2}>
-        <InputForm
-          label="Logradouro (rua/avenida...) *"
-          value={streetName}
-          onChange={handleStreetName}
-          errorMessage="Logradouro é obrigatório"
-        />
-        <Flex gap={8} style={{ width: '100%' }}>
+      <Row gutter={8}>
+        <Col span={24}>
+          <Alert
+            description={zipCodeAlertDescription()}
+            style={{
+              background: '#d8161620',
+              border: '1px solid #d81616',
+              borderRadius: '6px',
+              padding: '12px',
+              marginBottom: '18.84px',
+            }}
+          />
+        </Col>
+        <Col xs={24} md={18}>
+          <InputForm
+            label="Logradouro (rua/avenida...) *"
+            value={addressForm.streetName}
+            onChange={handleStreetName}
+            errorMessage="Logradouro é obrigatório"
+            showErrorMessage={addressFormError.streetName}
+          />
+        </Col>
+        <Col xs={8} md={6}>
           <InputForm
             label="Número *"
-            value={number}
+            value={addressForm.number}
             onChange={handleNumber}
             errorMessage="Número é obrigatório"
-            containerProps={{ flex: 1 }}
+            showErrorMessage={addressFormError.number}
           />
+        </Col>
+        <Col xs={16} md={12}>
           <InputForm
             label="Complemento"
-            value={complement}
+            value={addressForm.complement}
             onChange={handleComplement}
-            containerProps={{ flex: 1 }}
           />
+        </Col>
+        <Col xs={24} md={12}>
           <InputForm
             label="Bairro*"
-            value={neighborhood}
+            value={addressForm.neighborhood}
             onChange={handleNeighborhood}
             errorMessage="Bairro é obrigatório"
-            containerProps={{ flex: 2 }}
+            showErrorMessage={addressFormError.neighborhood}
           />
-        </Flex>
-        <Flex gap={8} style={{ width: '100%' }}>
+        </Col>
+        <Col xs={24} md={12}>
           <InputForm
             label="Cidade *"
-            value={city}
+            value={addressForm.city}
             onChange={handleCity}
             errorMessage="Cidade é obrigatória"
-            containerProps={{ flex: 1 }}
+            showErrorMessage={addressFormError.city}
           />
+        </Col>
+        <Col xs={24} md={12}>
           <InputForm
             label="Ponto de referência"
-            value={reference}
+            value={addressForm.reference}
             onChange={handleReference}
-            containerProps={{ flex: 2 }}
           />
-        </Flex>
-      </Flex>
+        </Col>
+      </Row>
     </AddressFormContainer>
   );
 };

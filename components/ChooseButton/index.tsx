@@ -3,29 +3,35 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
-import { AddButton, QuantityInput, SubtractButton } from './styles';
-import Image from 'next/image';
 import { Product } from '@/interfaces/Product';
 import { CartItemList } from '@/interfaces/CartItemList';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { setCart } from '@/store/features/cart';
-import { Flex } from 'antd';
+import { Flex, Typography } from 'antd';
 import Icon from '@mdi/react';
 import { mdiMinusThick, mdiPlusThick } from '@mdi/js';
+import RemoveItemModal from '../RemoveItemModal';
+import ButtonSun from '../ButtonSun';
 
 interface ChooseButtonProps {
   product: Product;
-  productIsInCart: boolean;
+  activeAlert?: boolean;
 }
 
-const ChooseButton = ({ product, productIsInCart }: ChooseButtonProps) => {
+const ChooseButton = ({ product, activeAlert = false }: ChooseButtonProps) => {
   const dispatch = useAppDispatch();
+  const { Text } = Typography;
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
 
   const [quantityItem, setQuantityItem] = useState<number>(0);
+  const [isRemoveItemModalOpen, setIsRemoveItemModalOpen] = useState(false);
 
   const handleSubtractItem = () => {
+    if (activeAlert && quantityItem === 1) {
+      setIsRemoveItemModalOpen(true);
+      return;
+    }
     if (quantityItem > 0 && cart) {
       setQuantityItem(quantityItem - 1);
       const newCartItem = cart.cartItemList
@@ -191,23 +197,46 @@ const ChooseButton = ({ product, productIsInCart }: ChooseButtonProps) => {
     <Flex align="flex-end">
       {quantityItem > 0 && (
         <>
-          <SubtractButton onClick={handleSubtractItem}>
-            <Icon path={mdiMinusThick} size={0.7} color={'#333'} />
-          </SubtractButton>
-          <QuantityInput
+          <ButtonSun
+            onClick={handleSubtractItem}
+            icon={<Icon path={mdiMinusThick} size={0.7} color={'#FFF'} />}
+          />
+          {/* <SubtractButton onClick={handleSubtractItem}>
+            <Icon path={mdiMinusThick} size={0.7} color={'#FFF'} />
+          </SubtractButton> */}
+          <Flex
+            align="center"
+            justify="center"
+            style={{ width: '28px', height: '28px', margin: '0 4px' }}
+          >
+            <Text style={{ fontWeight: 600, fontSize: '1rem' }}>
+              {quantityItem}
+            </Text>
+          </Flex>
+
+          {/* <QuantityInput
             value={quantityItem}
             onChange={handleInputItem}
             style={{ color: '#333', fontWeight: 700, textAlign: 'center' }}
-          />
+          /> */}
         </>
       )}
-      <AddButton
+      <ButtonSun
+        onClick={handleAddItem}
+        icon={<Icon path={mdiPlusThick} size={0.7} color={'#FFF'} />}
+      />
+      {/* <AddButton
         type="primary"
         onClick={handleAddItem}
         $isInCart={quantityItem > 0}
       >
-        <Icon path={mdiPlusThick} size={0.7} color={'#333'} />
-      </AddButton>
+        <Icon path={mdiPlusThick} size={0.7} color={'#FFF'} />
+      </AddButton> */}
+      <RemoveItemModal
+        item={cart?.cartItemList.find((cil) => cil.id === product.id) || null}
+        isRemoveItemModalOpen={isRemoveItemModalOpen}
+        onIsRemoveItemModalOpen={setIsRemoveItemModalOpen}
+      />
     </Flex>
   );
 };

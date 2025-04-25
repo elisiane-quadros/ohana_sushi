@@ -1,28 +1,22 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { Flex } from 'antd';
 import { useAppDispatch } from '@/hooks/redux';
 import { setShowCart } from '@/store/features/cart';
-
-const Header = dynamic(() => import('@/components/Header'), { ssr: false });
-const Showcase2 = dynamic(() => import('@/components/Showcase2'), {
-  ssr: false,
-});
-const PreviewStatus = dynamic(() => import('@/components/PreviewStatus'), {
-  ssr: false,
-});
+import Showcase2 from '@/components/Showcase2';
+import Header from '@/components/Header';
+import MaintenanceStatus from '@/components/MaintenanceStatus';
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const previewStatus = true;
+  const maintenanceStatus = true;
 
   useEffect(() => {
-    dispatch(setShowCart(!previewStatus));
-  }, [previewStatus]);
+    dispatch(setShowCart(!maintenanceStatus));
+  }, [maintenanceStatus]);
 
-  return !previewStatus ? (
+  return !maintenanceStatus ? (
     <Flex vertical>
       <Header />
       <main style={{ maxWidth: '100vw' }}>
@@ -33,7 +27,7 @@ const Home = () => {
     <Flex vertical>
       <Header />
       <main style={{ maxWidth: '100vw' }}>
-        <PreviewStatus />
+        <MaintenanceStatus />
       </main>
     </Flex>
   );

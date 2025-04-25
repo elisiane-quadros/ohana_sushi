@@ -3,17 +3,31 @@ import styled from 'styled-components';
 
 const { Text } = Typography;
 
-export const StyledInput = styled(Input)`
-  border-radius: 6px;
+interface StyledInputProps {
+  redStyled?: boolean;
+}
 
-  &:hover:not(:focus) {
-    border-color: #33333360;
-    box-shadow: 1.5px 1.5px 4px #33333320 !important;
+export const StyledInput = styled(Input)<StyledInputProps>`
+  border-radius: 4px;
+  border-color: ${(props) => (props.redStyled ? '#d8161660' : '#33333360')};
+  font-family: var(--montserrat), sans-serif;
+
+  &:hover {
+    border-color: ${(props) =>
+      props.redStyled ? '#d81616 !important' : '#000 !important'};
+    box-shadow: 1.5px 1.5px 4px
+      ${(props) =>
+        props.redStyled ? '#d8161620 !important' : '#33333320 !important'};
   }
 
-  &:focus {
-    border-color: #333 !important;
+  &:focus-within {
+    border-color: ${(props) => (props.redStyled ? '#d8161660' : '#33333360')};
+    box-shadow: none !important;
   }
+
+  /* &::placeholder {
+    font-family: var(--montserrat), sans-serif;
+  } */
 `;
 
 export const ErrorMessage = styled(Text)`

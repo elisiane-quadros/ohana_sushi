@@ -4,10 +4,17 @@ import { ButtonLinkStyled } from './styles';
 
 interface ButtonLinkProps extends ButtonProps {
   children: ReactNode;
+  isAppLink?: boolean;
 }
 
-const ButtonLink = ({ children, ...props }: ButtonLinkProps) => (
-  <ButtonLinkStyled {...props}>{children}</ButtonLinkStyled>
+const ButtonLink = ({
+  children,
+  isAppLink = false,
+  ...props
+}: ButtonLinkProps) => (
+  <ButtonLinkStyled {...props} $isAppLink={isAppLink}>
+    {children}
+  </ButtonLinkStyled>
 );
 
 export default ButtonLink;

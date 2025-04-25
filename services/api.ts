@@ -11,3 +11,14 @@ export async function fetchItems() {
     throw error;
   }
 }
+
+export async function getZipCodeService(zipCode: string) {
+  try {
+    const response = await axios.get(
+      `https://viacep.com.br/ws/${zipCode}/json`,
+    );
+    return response?.data;
+  } catch (error: any) {
+    return error?.response;
+  }
+}

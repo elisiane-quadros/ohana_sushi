@@ -1,4 +1,11 @@
+import { Flex, Typography } from 'antd';
 import styled from 'styled-components';
+
+const { Title, Text } = Typography;
+
+interface ScreenWidth {
+  isMdDown: boolean;
+}
 
 export const HeaderContainer = styled.header`
   display: flex;
@@ -39,34 +46,53 @@ export const HeaderContent = styled.div`
   display: flex;
   align-items: flex-end;
   height: 500px;
-  width: 1344px;
-  padding: 16px 0 16px 0;
+  width: 1376px;
+  padding: 100px 16px 16px 16px;
 
   @media (min-width: 768px) {
-    padding: 16px 0 64px 0;
+    padding: 100px 16px 32px 16px;
   }
 `;
 
 export const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 560px;
-  padding: 0 16px;
-  font-family: var(--inria-sans), sans-serif;
-  & h2 {
-    color: #fff;
-    font-family: var(--inria-sans), sans-serif;
-    font-size: 36px;
-  }
-  & span {
-    font-family: var(--inria-sans), sans-serif;
-    color: #fff;
-    font-size: 22px;
-  }
+  justify-content: space-between;
+  align-items: stretch;
+  height: 100%;
+  max-width: 600px;
+  font-family: var(--montserrat), sans-serif;
+`;
+
+export const OhanaSushi = styled(Title)<ScreenWidth>`
+  width: fit-content !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  color: #fff !important;
+  text-shadow: 2px 4px 8px #d81616;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  font-size: ${(props) =>
+    props.isMdDown ? '2.4rem !important' : '3.2rem !important'};
+`;
+
+export const HeaderTextIntroduction = styled(Title)<ScreenWidth>`
+  color: #fff !important;
+  font-size: 1.4rem !important;
+  font-weight: 400 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  font-family: var(--montserrat), sans-serif;
+`;
+
+export const HeaderText = styled(Text)<ScreenWidth>`
+  color: #fff !important;
+  font-size: 1.1rem !important;
+  text-align: justify !important;
+  font-family: var(--montserrat), sans-serif;
 `;
 
 export const HightLightText = styled.span`
   color: #d81616 !important;
-  font-size: 36px !important;
+  /* font-size: 36px !important; */
 `;

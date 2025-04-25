@@ -16,6 +16,7 @@ import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
 import ButtonPrimary from '../ButtonPrimary';
 import ButtonLink from '../ButtonLink';
 import Link from 'next/link';
+import sumTotalCartItems from '@/utils/sumTotalCartItems';
 
 export const Cart = () => {
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
@@ -24,26 +25,35 @@ export const Cart = () => {
   const [totalCartItems, setTotalCartItems] = useState<number | null>(null);
   const [expandCart, setExpandCart] = useState(false);
 
-  const sumTotalCartItems = () => {
-    if (cart && cart?.cartItemList) {
-      let newTotalCartItems: number = 0;
-      cart?.cartItemList.map((item) => {
-        newTotalCartItems += item.quantity;
-      });
-      setTotalCartItems(newTotalCartItems === 0 ? null : newTotalCartItems);
+  // const sumTotalCartItems = () => {
+  //   if (cart && cart?.cartItemList) {
+  //     let newTotalCartItems: number = 0;
+  //     cart?.cartItemList.map((item) => {
+  //       newTotalCartItems += item.quantity;
+  //     });
+  //     setTotalCartItems(newTotalCartItems === 0 ? null : newTotalCartItems);
 
-      if (!cart?.cartItemList.length) {
-        setExpandCart(false);
-      }
-    }
-  };
+  //     if (!cart?.cartItemList.length) {
+  //       setExpandCart(false);
+  //     }
+  //   }
+  // };
 
   const handleExpandCart = () => {
     setExpandCart(!expandCart);
   };
 
+  const sumTotal = () => {
+    const newTotalCardItems = sumTotalCartItems(cart);
+    setTotalCartItems(newTotalCardItems);
+
+    if (!cart?.cartItemList.length) {
+      setExpandCart(false);
+    }
+  };
+
   useEffect(() => {
-    sumTotalCartItems();
+    sumTotal();
   }, [cart]);
 
   return (

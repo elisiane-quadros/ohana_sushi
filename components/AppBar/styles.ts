@@ -28,6 +28,7 @@ export const HomeButton = styled(Button)`
   background-color: transparent;
   border: none;
   padding: 0;
+  box-shadow: none;
 
   &:hover {
     background: transparent !important;

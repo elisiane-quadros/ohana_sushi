@@ -16,6 +16,7 @@ export const PaymentMethodButton = styled(Button)<PaymentMethodButtonProps>`
   display: flex;
   justify-content: center;
   gap: 0;
+  width: 100%;
   height: 64px;
   background-color: ${(props) =>
     props.$isActive ? '#333 !important' : '#fff !important'};

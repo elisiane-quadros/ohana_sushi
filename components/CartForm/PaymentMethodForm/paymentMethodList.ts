@@ -11,7 +11,7 @@ const paymentMethodList: PaymentMethod[] = [
   },
   {
     id: 2,
-    title: 'Cartão de Débito',
+    title: 'Débito',
     description: 'pagamento na entrega',
     type: 'DEBIT_CARD',
     order: 2,
@@ -19,7 +19,7 @@ const paymentMethodList: PaymentMethod[] = [
   },
   {
     id: 3,
-    title: 'Cartão de Crédito',
+    title: 'Crédito',
     description: 'pagamento na entrega',
     type: 'CREDIT_CARD',
     order: 3,
@@ -30,7 +30,7 @@ const paymentMethodList: PaymentMethod[] = [
     id: 4,
     title: 'Dinheiro',
     description: 'pagamento na entrega',
-    type: 'DEBIT_CARD',
+    type: 'MONEY',
     order: 4,
     enable: true,
   },

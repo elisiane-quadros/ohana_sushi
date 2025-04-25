@@ -1,0 +1,19 @@
+.phoneInput {
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  height: 40px;
+  width: 100%;
+  padding: 7px 11px;
+}
+
+.phoneInput:hover:not(:focus) {
+  border-color: #33333360;
+  box-shadow: 1.5px 1.5px 4px #33333320;
+}
+
+.phoneInput:focus {
+  border-color: #333 !important;
+  outline: none;
+  border-width: 1px;
+  box-shadow: 1.5px 1.5px 4px #d8161620;
+}
