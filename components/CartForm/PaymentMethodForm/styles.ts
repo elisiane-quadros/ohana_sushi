@@ -2,7 +2,9 @@ import { Button, Flex } from 'antd';
 import styled from 'styled-components';
 
 export const PaymentMethodFormContainer = styled(Flex)`
-  background: #fff;
+  background: #f7f7f7;
+  border: 1px solid #d9d9d9;
+  box-shadow: 2px 2px 4px #d8161630;
   border-radius: 4px;
   padding: 16px;
   width: 100%;

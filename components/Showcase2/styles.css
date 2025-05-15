@@ -45,7 +45,7 @@
 }
 
 .filter-button .ant-radio-button-wrapper-checked:hover {
-  background-color: #d81616 !important;
+  background-color: #7f1e1e !important;
   color: #fff !important;
   border-color: #d81616 !important;
   box-shadow: 1.5px 1.5px 4px #33333320 !important;
@@ -76,6 +76,32 @@
   height: 24px !important;
 }
 
+@media (max-width: 575px) {
+  .showcase-carousel .slick-arrow {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .showcase-carousel .slick-arrow::after {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* .showcase-carousel .slick-next::after {
+    border-inline-width: 4px 0 !important;
+    border-block-width: 4px 0 !important;
+  }
+
+  .showcase-carousel .slick-prev::after {
+    border-inline-width: 4px 0 !important;
+    border-block-width: 4px 0 !important;
+  } */
+}
+
+.showcase-carousel .slick-disabled {
+  opacity: 0.3 !important;
+}
+
 .showcase-carousel .slick-next::after {
   border-inline-width: 6px 0 !important;
   border-block-width: 6px 0 !important;
@@ -92,6 +118,16 @@
 
 .showcase-carousel .slick-dots-bottom button {
   height: 8px !important;
+}
+
+@media (max-width: 575px) {
+  .showcase-carousel .slick-dots-bottom li {
+    width: 42px !important;
+  }
+
+  .showcase-carousel .slick-dots-bottom button {
+    height: 8px !important;
+  }
 }
 
 .showcase-carousel .slick-dots-bottom .slick-active button {

@@ -3,57 +3,65 @@
 import { AppBarArea, AppBarContainer, HomeButton } from './styles';
 import logo from '../../public/images/newLogoB.png';
 import Image from 'next/image';
-import Cart from '../Cart';
-import { Flex } from 'antd';
+import { Flex, Typography } from 'antd';
 import ButtonLink from '../ButtonLink';
 import Icon from '@mdi/react';
 import { mdiInstagram, mdiWhatsapp } from '@mdi/js';
 import useResponsive from '@/hooks/useResponsive';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useAppDispatch } from '@/hooks/redux';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setShowCart } from '@/store/features/cart';
 import Link from 'next/link';
 
 const AppBar = () => {
-  const { isXs } = useResponsive();
-  const showCart: boolean = useAppSelector((state) => state.cart.showCart);
+  const { isXs, isMdDown } = useResponsive();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+  const { Text } = Typography;
+
+  const [isInHomePage, setIsInHomePage] = useState(false);
 
   useEffect(() => {
     const newShowCart: boolean = pathname === '/';
     dispatch(setShowCart(newShowCart));
+    setIsInHomePage(newShowCart);
   }, [pathname, dispatch]);
 
   return (
-    <AppBarContainer>
+    <AppBarContainer
+      style={{
+        background: isInHomePage
+          ? 'rgba(0, 0, 0, 0.85)'
+          : 'rgba(0, 0, 0, 0.85)',
+      }}
+    >
       <AppBarArea>
-        <Flex align="center" gap={24}>
+        <Flex align="center" gap={isXs ? 16 : 24}>
           <Link href={'/'}>
             <HomeButton>
               <Image src={logo} width={80} height={80} alt="Ohana Sushi" />
             </HomeButton>
           </Link>
-          <Flex align="center" gap={isXs ? 4 : 16}>
+          <Flex align="center" gap={isXs ? 2 : 16}>
             <ButtonLink
               isAppLink
               icon={<Icon path={mdiWhatsapp} size={1.2} />}
-              style={{ fontWeight: 600, fontSize: '16px' }}
+              style={{ fontWeight: 600, fontSize: '1.25rem' }}
             >
               <a
-                href="https://wa.me/5551996090597?text=Olá,%20estou%20vindo%20do%20www.ohanasushi.com.br%20e%20quero%20fazer%20um%20pedido"
+                href="https://wa.me/5551996090597?text=Olá,%20estou%20vindo%20do%20site%20e%20gostaria%20de%20mais%20informações"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: 'inherit', textDecoration: 'none' }}
               >
-                {isXs ? '' : '(51) 99609-0597'}
+                {isMdDown ? '' : '(51) 99609-0597'}
               </a>
             </ButtonLink>
             <ButtonLink
               isAppLink
               icon={<Icon path={mdiInstagram} size={1.2} />}
-              style={{ fontWeight: 600, fontSize: '16px' }}
+              style={{ fontWeight: 600, fontSize: '1.25rem' }}
             >
               <a
                 href="https://www.instagram.com/ohanasushi_delivery"
@@ -61,12 +69,23 @@ const AppBar = () => {
                 rel="noopener noreferrer"
                 style={{ color: 'inherit', textDecoration: 'none' }}
               >
-                {isXs ? '' : 'ohanasushi_delivery'}
+                {isMdDown ? '' : 'ohanasushi_delivery'}
               </a>
             </ButtonLink>
           </Flex>
         </Flex>
-        {/* {showCart ? <Cart /> : null} */}
+        <Flex>
+          <Text
+            style={{
+              fontWeight: 600,
+              color: '#d81616',
+              fontSize: isXs ? '1rem' : '1.25rem',
+              textAlign: 'right',
+            }}
+          >
+            Atendemos todos os dias das 18:30h à 00:00h
+          </Text>
+        </Flex>
       </AppBarArea>
     </AppBarContainer>
   );

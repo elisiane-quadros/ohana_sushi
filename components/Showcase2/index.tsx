@@ -15,6 +15,12 @@ import { Product } from '@/interfaces/Product';
 import { ChangeEvent, useEffect, useState } from 'react';
 import productList from './productList';
 import ProductCard2 from '../ProductCard2';
+import useResponsive from '@/hooks/useResponsive';
+import Cart from '../Cart';
+import Link from 'next/link';
+import ButtonPrimary from '../ButtonPrimary';
+import { CartInterface } from '@/interfaces/CartInterface';
+import { useAppSelector } from '@/hooks/redux';
 
 interface ProductListByType {
   id: number;
@@ -25,6 +31,9 @@ interface ProductListByType {
 }
 
 const Showcase2 = () => {
+  const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
+
+  const { isLgDown, isXs, isLg } = useResponsive();
   const [productListByType, setProductListByType] = useState<
     ProductListByType[]
   >([]);
@@ -219,23 +228,23 @@ const Showcase2 = () => {
           background: 'rgba(0, 0, 0, 0.85)',
           boxShadow: '1.5px 1.5px 4px #d8161620 !important',
           zIndex: 1000,
-          backdropFilter: 'blur(8px)', // Optional: adds a nice blur effect
+          backdropFilter: 'blur(8px)',
         }}
         justify="center"
         align="center"
       >
         <SearchAnFilterFlex align="center" className="show-case-flex">
-          <Row gutter={[16, 16]} style={{ width: '100%' }}>
-            <Col span={6}>
+          <Row gutter={isXs ? [12, 12] : [16, 16]} style={{ width: '100%' }}>
+            <Col xs={24} lg={12} xl={6} order={1}>
               <InputForm
                 placeholder="Buscar"
-                // suffix={<Icon path={mdiMagnify} size={1} color="#d81616" />}
+                suffix={<Icon path={mdiMagnify} size={1} color="#d81616" />}
                 redStyled
                 onChange={handleSearch}
                 allowClear
               />
             </Col>
-            <Col span={12}>
+            <Col xs={24} lg={24} xl={12} order={isLg ? 3 : 2}>
               <Radio.Group
                 value={selectedProductType}
                 className="filter-button"
@@ -252,9 +261,14 @@ const Showcase2 = () => {
                 </Radio.Button>
               </Radio.Group>
             </Col>
-            <Col span={6}>
-              <Flex justify="end" align="center" style={{ width: '100%' }}>
-                <Icon path={mdiCartOutline} size={1.5} color="#d81616" />
+            <Col xs={24} lg={12} xl={6} order={isLg ? 2 : 3}>
+              <Flex
+                justify="end"
+                align="center"
+                style={{ width: '100%' }}
+                gap={16}
+              >
+                <Cart />
               </Flex>
             </Col>
           </Row>
@@ -262,12 +276,7 @@ const Showcase2 = () => {
       </Flex>
       <ShowCaseFlex className="show-case-flex" vertical gap={32}>
         {productListByTypeFiltered.map((productByType) => (
-          <Flex
-            vertical
-            gap={16}
-            // style={{ paddingLeft: '8px' }}
-            key={productByType.id}
-          >
+          <Flex vertical gap={16} key={productByType.id}>
             {productByType.productLists.length ? (
               <ProductTypeTitleFlex id={productByType.type}>
                 <ProductTypeTitle level={2}>
@@ -277,36 +286,59 @@ const Showcase2 = () => {
             ) : null}
 
             <Carousel
-              arrows={productByType.productLists.length > 6}
-              dots={productByType.productLists.length > 6}
-              draggable
+              arrows={
+                isXs
+                  ? productByType.productLists.length > 3
+                  : isLgDown
+                    ? productByType.productLists.length > 4
+                    : productByType.productLists.length > 6
+              }
+              dots={
+                isXs
+                  ? productByType.productLists.length > 3
+                  : isLgDown
+                    ? productByType.productLists.length > 4
+                    : productByType.productLists.length > 6
+              }
+              // dotPosition={isXs ? 'left' : 'bottom'}
+              draggable={isLgDown}
               infinite={false}
               className="showcase-carousel"
             >
               {/* Group products into chunks of 6 */}
               {Array.from({
-                length: Math.ceil(productByType.productLists.length / 6),
+                length: Math.ceil(
+                  isXs
+                    ? productByType.productLists.length / 3
+                    : isLgDown
+                      ? productByType.productLists.length / 4
+                      : productByType.productLists.length / 6,
+                ),
               }).map((_, index) => {
-                const start = index * 6;
+                const start = isXs
+                  ? index * 3
+                  : isLgDown
+                    ? index * 4
+                    : index * 6;
                 const productsChunk = productByType.productLists.slice(
                   start,
-                  start + 6,
+                  isXs ? start + 3 : isLgDown ? start + 4 : start + 6,
                 );
 
                 return (
                   <div key={index}>
                     <Row
-                      gutter={[16, 16]}
+                      gutter={isXs ? [0, 8] : [16, 16]}
                       style={{
                         width: '100%',
-                        padding: '0 48px 48px 48px',
+                        padding: isXs ? '0 36px 48px 36px' : '0 48px 48px',
                       }}
                     >
                       {productsChunk.map((product) => (
                         <Col
                           xl={8}
                           lg={12}
-                          sm={24}
+                          md={12}
                           xs={24}
                           key={product.id}
                           style={{ display: 'flex' }}

@@ -17,7 +17,7 @@ interface ProductCardProps {
 const ProductCard2 = ({ product }: ProductCardProps) => {
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
   const { Title, Text } = Typography;
-  const { isMdDown } = useResponsive();
+  const { isMdDown, isXs } = useResponsive();
 
   const findProductQuantityInCart = (productId: number) => {
     if (cart) {
@@ -34,9 +34,27 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
     <ProductCardContainerFlex
       vertical
       justify="space-between"
-      style={{ height: `${isMdDown ? '210px' : '240px'}` }}
+      style={{
+        minHeight: `${isXs ? '168px' : isMdDown ? '210px' : '240px'}`,
+        borderRadius: '4px',
+        borderWidth: findProductQuantityInCart(product.id) ? '1px' : '1px',
+        borderStyle: 'solid',
+        borderImage: findProductQuantityInCart(product.id)
+          ? 'linear-gradient(to right, #d81616aa, #d8161633) 1'
+          : 'none',
+        boxShadow: findProductQuantityInCart(product.id)
+          ? '0 0 0 1px #d81616aa'
+          : 'none',
+      }}
     >
-      <Flex vertical gap={2} style={{ padding: '8px' }}>
+      <Flex
+        vertical
+        gap={2}
+        style={{
+          padding: isXs ? '8px 8px 0 8px' : '8px',
+          // background: 'linear-gradient(to right, #d81616aa, #d8161633)',
+        }}
+      >
         <Flex gap={4} align="center" justify="space-between">
           <Title
             level={5}
@@ -81,7 +99,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
           </Flex>
           <Flex vertical gap={3} style={{ width: '100%' }}>
             {product.ingredientList.map((ingredient, index) => {
-              if (index < (isMdDown ? 4 : 6)) {
+              if (index < (isXs ? 3 : isMdDown ? 4 : 6)) {
                 return (
                   <Text
                     style={{
@@ -95,13 +113,13 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
                 );
               }
             })}
-            {product.ingredientList.length > (isMdDown ? 4 : 6) && (
+            {product.ingredientList.length > (isXs ? 3 : isMdDown ? 4 : 6) && (
               <Popover
                 placement="bottom"
                 content={
                   <Flex vertical gap={2}>
                     {product.ingredientList.map((ingredient, index) => {
-                      if (index >= (isMdDown ? 4 : 6)) {
+                      if (index >= (isXs ? 3 : isMdDown ? 4 : 6)) {
                         return (
                           <Text
                             style={{
@@ -119,7 +137,8 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
                 }
               >
                 <ButtonLink isAppLink style={{ lineHeight: 1, paddingLeft: 0 }}>
-                  + {`${product.ingredientList.length - (isMdDown ? 4 : 6)}`}{' '}
+                  +{' '}
+                  {`${product.ingredientList.length - (isXs ? 3 : isMdDown ? 4 : 6)}`}{' '}
                   itens
                 </ButtonLink>
               </Popover>
@@ -131,9 +150,14 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
         justify="space-between"
         align="center"
         style={{
-          background: findProductQuantityInCart(product.id) ? '#d8161620' : '',
+          background: 'linear-gradient(to right, #d81616aa, #d8161633)',
+          // background: findProductQuantityInCart(product.id)
+          //   ? 'linear-gradient(to right, #d81616aa, #d8161633)'
+          //   : '',
+          // opacity: findProductQuantityInCart(product.id) ? 0.5 : 1,
           padding: '8px',
-          borderTop: '1px solid #d9d9d9',
+          borderTop: isXs ? 'none' : '1px solid #d9d9d9',
+          borderRadius: '0 0 2px 2px',
         }}
       >
         <Title
@@ -152,7 +176,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
             currency: 'BRL',
           }).format(product.price)}
         </Title>
-        <ChooseButton product={product} />
+        <ChooseButton product={product} sunButton />
       </Flex>
     </ProductCardContainerFlex>
   );

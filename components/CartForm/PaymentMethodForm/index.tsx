@@ -43,7 +43,15 @@ const PaymentMethodForm = ({
       >
         <Flex gap={8} align="flex-end">
           <Icon path={mdiCurrencyUsd} size={1} color="#d81616" />
-          <Title level={4} style={{ marginBottom: 0, lineHeight: 1.3 }}>
+          <Title
+            level={4}
+            style={{
+              marginBottom: 0,
+              lineHeight: 1.3,
+              fontFamily: 'var(--inria-sans) !important',
+              fontSize: '1.25rem',
+            }}
+          >
             Forma de Pagamento
           </Title>
         </Flex>
@@ -72,6 +80,8 @@ const PaymentMethodForm = ({
                   style={{
                     marginBottom: 0,
                     color: `${selectedPaymentMethod?.id === paymentMethod.id ? '#FFF' : '#333'}`,
+                    fontFamily: 'var(--inria-sans) !important',
+                    fontSize: '1.25rem',
                   }}
                 >
                   {paymentMethod.title}

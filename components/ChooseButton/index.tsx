@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
 import { Product } from '@/interfaces/Product';
 import { CartItemList } from '@/interfaces/CartItemList';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { setCart } from '@/store/features/cart';
 import { Flex, Typography } from 'antd';
@@ -13,13 +13,19 @@ import Icon from '@mdi/react';
 import { mdiMinusThick, mdiPlusThick } from '@mdi/js';
 import RemoveItemModal from '../RemoveItemModal';
 import ButtonSun from '../ButtonSun';
+import { DefaultButton } from './styles';
 
 interface ChooseButtonProps {
   product: Product;
   activeAlert?: boolean;
+  sunButton?: boolean;
 }
 
-const ChooseButton = ({ product, activeAlert = false }: ChooseButtonProps) => {
+const ChooseButton = ({
+  product,
+  activeAlert = false,
+  sunButton,
+}: ChooseButtonProps) => {
   const dispatch = useAppDispatch();
   const { Text } = Typography;
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
@@ -47,7 +53,8 @@ const ChooseButton = ({ product, activeAlert = false }: ChooseButtonProps) => {
         .filter((item) => item.quantity > 0);
 
       const newCart: CartInterface = {
-        id: cart.id,
+        ...cart,
+        // deliveryCost: cart.deliveryCost || 0,
         value: cart.value - product.price,
         cartItemList: newCartItem,
       };
@@ -73,7 +80,7 @@ const ChooseButton = ({ product, activeAlert = false }: ChooseButtonProps) => {
         });
 
         const newCart: CartInterface = {
-          id: cart.id,
+          ...cart,
           value: cart.value + product.price,
           cartItemList: newCartItem,
         };
@@ -91,7 +98,7 @@ const ChooseButton = ({ product, activeAlert = false }: ChooseButtonProps) => {
         ];
 
         const newCart: CartInterface = {
-          id: cart.id,
+          ...cart,
           value: cart.value + product.price,
           cartItemList: newCartItemList,
         };
@@ -109,78 +116,11 @@ const ChooseButton = ({ product, activeAlert = false }: ChooseButtonProps) => {
       const newCart: CartInterface = {
         id: uuidv4(),
         value: product.price,
+        deliveryCost: 0,
         cartItemList: [newCartItemList],
       };
 
       dispatch(setCart(newCart));
-    }
-  };
-
-  const handleInputItem = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value, 10);
-    if (newValue >= 0) {
-      setQuantityItem(newValue);
-      if (cart) {
-        const item =
-          cart.cartItemList.find((cil) => cil.id === product.id) || null;
-        if (item) {
-          const newCartItem = cart.cartItemList.map((cil) => {
-            if (cil.id === item.id) {
-              return {
-                ...cil,
-                quantity: newValue,
-              };
-            }
-            return cil;
-          });
-
-          let newCartFilteredItem = newCartItem;
-
-          if (newValue === 0) {
-            newCartFilteredItem = newCartItem.filter(
-              (item) => item.quantity > 0,
-            );
-          }
-
-          const newCart: CartInterface = {
-            id: cart.id,
-            value: cart.value + product.price,
-            cartItemList: newCartFilteredItem,
-          };
-
-          dispatch(setCart(newCart));
-        } else {
-          const newCartItemList: CartItemList[] = [
-            ...cart.cartItemList,
-            {
-              id: product.id,
-              product,
-              quantity: newValue,
-            },
-          ];
-
-          const newCart: CartInterface = {
-            id: cart.id,
-            value: cart.value + product.price,
-            cartItemList: newCartItemList,
-          };
-
-          dispatch(setCart(newCart));
-        }
-      } else {
-        const newCartItemList: CartItemList = {
-          id: product.id,
-          product,
-          quantity: newValue,
-        };
-
-        const newCart: CartInterface = {
-          id: uuidv4(),
-          value: product.price,
-          cartItemList: [newCartItemList],
-        };
-        dispatch(setCart(newCart));
-      }
     }
   };
 
@@ -191,47 +131,48 @@ const ChooseButton = ({ product, activeAlert = false }: ChooseButtonProps) => {
           ?.quantity || 0;
       setQuantityItem(newQuantityItem);
     }
-  }, []);
+  }, [cart]);
 
   return (
-    <Flex align="flex-end">
+    <Flex align="center">
       {quantityItem > 0 && (
         <>
-          <ButtonSun
-            onClick={handleSubtractItem}
-            icon={<Icon path={mdiMinusThick} size={0.7} color={'#FFF'} />}
-          />
-          {/* <SubtractButton onClick={handleSubtractItem}>
-            <Icon path={mdiMinusThick} size={0.7} color={'#FFF'} />
-          </SubtractButton> */}
+          {sunButton ? (
+            <ButtonSun
+              onClick={handleSubtractItem}
+              icon={<Icon path={mdiMinusThick} size={0.7} color={'#FFF'} />}
+            />
+          ) : (
+            <DefaultButton onClick={handleSubtractItem}>
+              <Icon path={mdiMinusThick} size={0.7} color={'#FFF'} />
+            </DefaultButton>
+          )}
           <Flex
             align="center"
             justify="center"
             style={{ width: '28px', height: '28px', margin: '0 4px' }}
           >
-            <Text style={{ fontWeight: 600, fontSize: '1rem' }}>
+            <Text
+              style={{
+                fontWeight: 600,
+                fontSize: sunButton ? '1rem' : '0.9rem',
+              }}
+            >
               {quantityItem}
             </Text>
           </Flex>
-
-          {/* <QuantityInput
-            value={quantityItem}
-            onChange={handleInputItem}
-            style={{ color: '#333', fontWeight: 700, textAlign: 'center' }}
-          /> */}
         </>
       )}
-      <ButtonSun
-        onClick={handleAddItem}
-        icon={<Icon path={mdiPlusThick} size={0.7} color={'#FFF'} />}
-      />
-      {/* <AddButton
-        type="primary"
-        onClick={handleAddItem}
-        $isInCart={quantityItem > 0}
-      >
-        <Icon path={mdiPlusThick} size={0.7} color={'#FFF'} />
-      </AddButton> */}
+      {sunButton ? (
+        <ButtonSun
+          onClick={handleAddItem}
+          icon={<Icon path={mdiPlusThick} size={0.7} color={'#FFF'} />}
+        />
+      ) : (
+        <DefaultButton onClick={handleAddItem}>
+          <Icon path={mdiPlusThick} size={0.7} color={'#FFF'} />
+        </DefaultButton>
+      )}
       <RemoveItemModal
         item={cart?.cartItemList.find((cil) => cil.id === product.id) || null}
         isRemoveItemModalOpen={isRemoveItemModalOpen}

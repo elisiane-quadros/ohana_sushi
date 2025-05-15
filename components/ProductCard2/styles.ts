@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const ProductCardContainerFlex = styled(Flex)`
   width: 100%;
-  /* height: 240px; */
   border-radius: 4px;
   background-color: #f7f7f7;
   border: 1px solid #d9d9d9;

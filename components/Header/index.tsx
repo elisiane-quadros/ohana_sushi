@@ -11,11 +11,14 @@ import {
   Overlay,
   TextContainer,
 } from './styles';
-import { Flex, Typography } from 'antd';
+import { Col, Flex, Popover, Row, Typography } from 'antd';
 import useResponsive from '@/hooks/useResponsive';
+import ButtonPrimary from '../ButtonPrimary';
+import deliveryCostList from '../InputSendCalculation/mock';
 
 const Header: React.FC = () => {
-  const { isMdDown } = useResponsive();
+  const { isMdDown, isXs } = useResponsive();
+  const { Text } = Typography;
 
   return (
     <HeaderContainer>
@@ -32,14 +35,45 @@ const Header: React.FC = () => {
             </Flex>
             <Flex
               vertical
-              gap={0}
-              style={{ maxWidth: `${isMdDown ? '300px' : '430px'}` }}
+              gap={16}
+              // style={{ maxWidth: `${isMdDown ? '300px' : '430px'}` }}
+              style={{ maxWidth: '460px' }}
+              className="neighborhoods"
             >
-              <HeaderText isMdDown={isMdDown}>
-                Sabores incríveis e qualidade só aqui no Ohana Sushi Delivery.
-                Peça e experimente o melhor da comida japonesa na{' '}
-                <HightLightText>Zona Sul de Porto Alegre.</HightLightText>
-              </HeaderText>
+              <Flex vertical>
+                <HeaderText isMdDown={isMdDown} isXs={isXs}>
+                  Sabores incríveis e qualidade só aqui no Ohana Sushi Delivery.
+                  Peça e experimente o melhor da comida japonesa na{' '}
+                  <HightLightText>*Zona Sul de Porto Alegre.</HightLightText>
+                </HeaderText>
+                <Text style={{ color: '#FFF', fontSize: '0.875rem' }}>
+                  * Confira a lista dos bairros que atendemos abaixo
+                </Text>
+              </Flex>
+              <Popover
+                placement="bottomRight"
+                content={
+                  <Flex
+                    style={{
+                      maxWidth: isXs ? '90vw' : '430px',
+                      padding: '0 12px 8px 12px',
+                    }}
+                  >
+                    <Row gutter={[12, 4]}>
+                      {deliveryCostList.map((item) => (
+                        <Col span={12} key={item.id}>
+                          <Typography.Text strong>{item.name}</Typography.Text>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Flex>
+                }
+                trigger="click"
+              >
+                <ButtonPrimary style={{ width: '100%' }}>
+                  Bairros que atendemos
+                </ButtonPrimary>
+              </Popover>
             </Flex>
           </TextContainer>
         </HeaderContent>

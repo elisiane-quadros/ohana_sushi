@@ -35,6 +35,10 @@ export const ProductTypeTitleFlex = styled(Flex)`
   background-image: url('/images/brush_red.png');
   background-repeat: no-repeat;
   background-size: 100% 48px;
+
+  @media (max-width: 575px) {
+    margin-left: 16px;
+  }
 `;
 
 export const ProductTypeTitle = styled(Title)`

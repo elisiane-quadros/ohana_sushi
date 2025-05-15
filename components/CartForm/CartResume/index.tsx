@@ -172,14 +172,42 @@ const CartResume = ({
           })}
         <Divider style={{ margin: '8px 0' }} />
         {cart ? (
-          <Flex justify="space-between">
-            <Text style={{ fontWeight: 600 }}>Total da compra:</Text>
-            <Text>
-              {new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              }).format(cart.value)}
-            </Text>
+          <Flex vertical gap={8}>
+            <Flex justify="space-between">
+              <Text style={{ fontWeight: 600 }}>Total de itens:</Text>
+              <Text>
+                {new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                }).format(cart.value)}
+              </Text>
+            </Flex>
+            {addressForm.neighborhood ? (
+              <Flex vertical gap={8}>
+                <Flex justify="space-between">
+                  <Text style={{ fontWeight: 600 }}>Valor da entrega:</Text>
+                  <Text>
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(addressForm.deliveryCost)}
+                  </Text>
+                </Flex>
+                <Flex justify="space-between">
+                  <Text style={{ fontWeight: 600 }}>Total da compra:</Text>
+                  <Text>
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(cart.value + addressForm.deliveryCost)}
+                  </Text>
+                </Flex>
+              </Flex>
+            ) : (
+              <Text style={{ color: '#d81616' }}>
+                *Selecione o bairro para calcular o valor da entrega.
+              </Text>
+            )}
           </Flex>
         ) : null}
         <Divider style={{ margin: '8px 0' }} />
@@ -187,7 +215,7 @@ const CartResume = ({
       <Flex vertical gap={16}>
         {cart ? (
           <ButtonWhatsapp
-            whatsappNumber="48991385686" // "51996090597"
+            whatsappNumber="51996090597"
             whatsappText={createOrderMessage(
               addressForm,
               selectedPaymentMethod,

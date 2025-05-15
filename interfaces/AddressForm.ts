@@ -7,4 +7,5 @@ export interface AddressProps {
   city: string;
   reference?: string;
   zipCode?: string;
+  deliveryCost: number;
 }

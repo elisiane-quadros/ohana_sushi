@@ -24,10 +24,6 @@ export const StyledInput = styled(Input)<StyledInputProps>`
     border-color: ${(props) => (props.redStyled ? '#d8161660' : '#33333360')};
     box-shadow: none !important;
   }
-
-  /* &::placeholder {
-    font-family: var(--montserrat), sans-serif;
-  } */
 `;
 
 export const ErrorMessage = styled(Text)`

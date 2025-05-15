@@ -1,5 +1,11 @@
 import { Alert, Col, Flex, Row, Typography } from 'antd';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { AddressFormContainer, ErrorMessage } from './styles';
 import Icon from '@mdi/react';
 import { mdiMapMarkerRadiusOutline } from '@mdi/js';
@@ -8,6 +14,7 @@ import { AddressProps } from '@/interfaces/AddressForm';
 import { IoIosContact } from 'react-icons/io';
 import { getZipCodeService } from '@/services/api';
 import { AddressFormError } from '@/interfaces/AddressFormError';
+import InputSendCalculation from '@/components/InputSendCalculation';
 
 interface AddressFormProps {
   addressForm: AddressProps;
@@ -186,13 +193,18 @@ const AddressForm = ({
     onAddressForm({ ...addressForm, reference: newReference });
   };
 
-  console.log('phone: ', addressForm.phone);
-
   return (
     <AddressFormContainer gap={8} vertical>
       <Flex align="center" gap={8}>
         <IoIosContact style={{ fontSize: '24px', color: '#d81616' }} />
-        <Title level={5} style={{ marginBottom: 0 }}>
+        <Title
+          level={5}
+          style={{
+            marginBottom: 0,
+            fontFamily: 'var(--inria-sans) !important',
+            fontSize: '1.25rem',
+          }}
+        >
           Contato:
         </Title>
       </Flex>
@@ -214,7 +226,15 @@ const AddressForm = ({
       </Row>
       <Flex align="center" gap={8} style={{ width: 'fit-content' }}>
         <Icon path={mdiMapMarkerRadiusOutline} size={1} color="#d81616" />
-        <Title level={5} style={{ marginBottom: 0, wordBreak: 'normal' }}>
+        <Title
+          level={5}
+          style={{
+            marginBottom: 0,
+            wordBreak: 'normal',
+            fontFamily: 'var(--inria-sans) !important',
+            fontSize: '1.25rem',
+          }}
+        >
           Endereço:
         </Title>
       </Flex>
@@ -257,12 +277,14 @@ const AddressForm = ({
           />
         </Col>
         <Col xs={24} md={12}>
-          <InputForm
+          <InputSendCalculation
             label="Bairro*"
             value={addressForm.neighborhood}
             onChange={handleNeighborhood}
             errorMessage="Bairro é obrigatório"
             showErrorMessage={addressFormError.neighborhood}
+            addressForm={addressForm}
+            onAddressForm={onAddressForm}
           />
         </Col>
         <Col xs={24} md={12}>

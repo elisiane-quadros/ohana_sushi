@@ -10,16 +10,23 @@ export const AppBarContainer = styled.div`
   position: absolute;
   top: 0;
   z-index: 10;
+  /* background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.1),
+    rgba(26, 25, 24, 0.1),
+    rgba(46, 44, 42, 0.85),
+    rgba(56, 54, 62, 0.95),
+    rgba(66, 64, 62, 0.98)
+  ); */
 `;
 
 export const AppBarArea = styled.div`
-  position: relative;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   width: 1376px;
   height: 100px;
-  padding: 16px 16px;
+  padding: 0 16px;
 `;
 
 export const HomeButton = styled(Button)`

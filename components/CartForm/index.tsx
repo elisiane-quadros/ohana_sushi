@@ -17,6 +17,7 @@ import { Order } from '@/interfaces/Order';
 import { setOrderList } from '@/store/features/order';
 import CartResume from './CartResume';
 import { AddressFormError } from '@/interfaces/AddressFormError';
+import { DeliveryCost } from '@/interfaces/DeliveryCost';
 
 interface CartFormProps {
   orderCompleted: boolean;
@@ -26,6 +27,9 @@ interface CartFormProps {
 const CartForm = ({ orderCompleted, onOrderCompleted }: CartFormProps) => {
   const { isMdDown } = useResponsive();
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
+  const deliveryCost: DeliveryCost | null = useAppSelector(
+    (state) => state.neighborhood.neighborhood,
+  );
   const orderList = useAppSelector((state) => state.order.orderList);
   const dispatch = useAppDispatch();
 
@@ -37,10 +41,11 @@ const CartForm = ({ orderCompleted, onOrderCompleted }: CartFormProps) => {
     streetName: '',
     number: '',
     complement: '',
-    neighborhood: '',
+    neighborhood: deliveryCost?.name || '',
     city: '',
     reference: '',
     zipCode: '',
+    deliveryCost: 0,
   });
   const [addressFormError, setAddressFormError] = useState<AddressFormError>({
     phone: false,

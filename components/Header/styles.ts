@@ -1,10 +1,11 @@
-import { Flex, Typography } from 'antd';
+import { Typography } from 'antd';
 import styled from 'styled-components';
 
 const { Title, Text } = Typography;
 
 interface ScreenWidth {
-  isMdDown: boolean;
+  isMdDown?: boolean;
+  isXs?: boolean;
 }
 
 export const HeaderContainer = styled.header`
@@ -34,14 +35,6 @@ export const Overlay = styled.div`
   align-items: center;
 `;
 
-export const Logo = styled.div`
-  background-image: url('/images/Logo500.png');
-  background-size: cover;
-  background-position: center;
-  width: 400px;
-  height: 400px;
-`;
-
 export const HeaderContent = styled.div`
   display: flex;
   align-items: flex-end;
@@ -60,6 +53,7 @@ export const TextContainer = styled.div`
   justify-content: space-between;
   align-items: stretch;
   height: 100%;
+  /* width: 500px; */
   max-width: 600px;
   font-family: var(--montserrat), sans-serif;
 `;
@@ -87,7 +81,9 @@ export const HeaderTextIntroduction = styled(Title)<ScreenWidth>`
 
 export const HeaderText = styled(Text)<ScreenWidth>`
   color: #fff !important;
-  font-size: 1.1rem !important;
+  font-size: ${(props) => (props.isXs ? '1.3rem' : '1.4rem !important')};
+  line-height: ${(props) => (props.isXs ? '1.3' : '1.4')};
+  line-height: 1.4;
   text-align: justify !important;
   font-family: var(--montserrat), sans-serif;
 `;

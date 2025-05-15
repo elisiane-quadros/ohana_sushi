@@ -25,8 +25,11 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: 'Ohana Sushi',
-  description: 'Japanese Restaurant',
+  title: 'Ohana Sushi Delivery',
+  description: 'Ohana Sushi - Delivery de Comida Japonesa',
+  icons: {
+    icon: '/images/newLogoB.png',
+  },
 };
 
 export default function RootLayout({

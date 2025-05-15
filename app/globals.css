@@ -17,7 +17,7 @@
 /* Apply Inria Sans to body and other text elements */
 body {
   font-family: var(--inria-sans) !important;
-  background: #ebebeb;
+  background: #fff;
   min-height: 100vh;
 }
 
@@ -41,4 +41,14 @@ textarea {
 
 .ant-spin-dot-holder {
   color: #d81616 !important;
+}
+
+.ant-popover .ant-popover-inner {
+  padding: 0 !important;
+  border-radius: 4px !important;
+  /* background-color: #f00 !important; */
+}
+
+.ant-popover .ant-popover-title {
+  margin-bottom: 0;
 }

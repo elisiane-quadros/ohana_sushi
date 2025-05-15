@@ -20,6 +20,17 @@ const createOrderMessage = (
     );
     message += `  *${index + 1}.* ${item.product.title} - ${item.quantity}x ${itemTotal}\n`;
   });
+  message += `Valor da entrega: R$ ${cart.deliveryCost.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })}\n`;
+  message += `Total: R$ ${(cart.value + cart.deliveryCost).toLocaleString(
+    'pt-BR',
+    {
+      style: 'currency',
+      currency: 'BRL',
+    },
+  )}\n`;
 
   message += `\n📍 *ENDEREÇO PARA A ENTREGA:*\n`;
   message += `🏠 ${addressForm.streetName}, ${addressForm.number} - ${addressForm.complement}\n`;

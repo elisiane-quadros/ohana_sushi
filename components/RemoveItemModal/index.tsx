@@ -40,7 +40,7 @@ const RemoveItemModal = ({
           (cartItem) => cartItem.id !== item.id,
         );
         const newCart: CartInterface = {
-          id: cart?.id,
+          ...cart,
           value: newEmptyCart ? 0 : cart?.value - item.product.price,
           cartItemList: newCartItemList,
         };
