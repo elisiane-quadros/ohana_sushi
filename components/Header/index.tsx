@@ -37,10 +37,11 @@ const Header: React.FC = () => {
               vertical
               gap={16}
               // style={{ maxWidth: `${isMdDown ? '300px' : '430px'}` }}
-              style={{ maxWidth: '460px' }}
+              style={{ maxWidth: '100%' }} // '460px' }}
               className="neighborhoods"
             >
-              <Flex vertical>
+              <div />
+              {/* <Flex vertical>
                 <HeaderText isMdDown={isMdDown} isXs={isXs}>
                   Sabores incríveis e qualidade só aqui no Ohana Sushi Delivery.
                   Peça e experimente o melhor da comida japonesa na{' '}
@@ -49,14 +50,14 @@ const Header: React.FC = () => {
                 <Text style={{ color: '#FFF', fontSize: '0.875rem' }}>
                   * Confira a lista dos bairros que atendemos abaixo
                 </Text>
-              </Flex>
+              </Flex> */}
               <Popover
                 placement="bottomRight"
                 content={
                   <Flex
                     style={{
                       maxWidth: isXs ? '90vw' : '430px',
-                      padding: '0 12px 8px 12px',
+                      padding: '8px 12px 8px 12px',
                     }}
                   >
                     <Row gutter={[12, 4]}>
@@ -70,7 +71,7 @@ const Header: React.FC = () => {
                 }
                 trigger="click"
               >
-                <ButtonPrimary style={{ width: '100%' }}>
+                <ButtonPrimary style={{ width: isXs ? '100%' : '420px' }}>
                   Bairros que atendemos
                 </ButtonPrimary>
               </Popover>

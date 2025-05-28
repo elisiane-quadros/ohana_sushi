@@ -40,10 +40,10 @@ export const HeaderContent = styled.div`
   align-items: flex-end;
   height: 500px;
   width: 1376px;
-  padding: 100px 16px 16px 16px;
+  padding: 100px 8px 16px 8px;
 
   @media (min-width: 768px) {
-    padding: 100px 16px 32px 16px;
+    padding: 100px 8px 32px 8px;
   }
 `;
 

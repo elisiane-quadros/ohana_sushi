@@ -206,13 +206,13 @@ export const Cart = () => {
         justify="flex-end"
         align="center"
         gap={12}
-        style={{ width: '100%', height: '40px' }}
+        style={{ height: '40px', position: 'relative' }}
       >
-        {totalCartItems ? (
+        {/* {totalCartItems ? (
           <ButtonPrimary style={{ width: '100%' }}>
             Detalhes do carrinho
           </ButtonPrimary>
-        ) : null}
+        ) : null} */}
         {totalCartItems ? (
           <CartQuantityNumber>
             <span>{totalCartItems}</span>

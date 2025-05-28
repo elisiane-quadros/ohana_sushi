@@ -151,10 +151,6 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
         align="center"
         style={{
           background: 'linear-gradient(to right, #d81616aa, #d8161633)',
-          // background: findProductQuantityInCart(product.id)
-          //   ? 'linear-gradient(to right, #d81616aa, #d8161633)'
-          //   : '',
-          // opacity: findProductQuantityInCart(product.id) ? 0.5 : 1,
           padding: '8px',
           borderTop: isXs ? 'none' : '1px solid #d9d9d9',
           borderRadius: '0 0 2px 2px',

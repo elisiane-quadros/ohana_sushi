@@ -4,10 +4,17 @@ import { ButtonPrimaryStyled } from './styles';
 
 interface ButtonPrimaryProps extends ButtonProps {
   children: ReactNode;
+  invert?: boolean;
 }
 
-const ButtonPrimary = ({ children, ...props }: ButtonPrimaryProps) => (
-  <ButtonPrimaryStyled {...props}>{children}</ButtonPrimaryStyled>
+const ButtonPrimary = ({
+  children,
+  invert = false,
+  ...props
+}: ButtonPrimaryProps) => (
+  <ButtonPrimaryStyled {...props} invert>
+    {children}
+  </ButtonPrimaryStyled>
 );
 
 export default ButtonPrimary;

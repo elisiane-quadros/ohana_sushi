@@ -26,7 +26,7 @@ export const AppBarArea = styled.div`
   align-items: center;
   width: 1376px;
   height: 100px;
-  padding: 0 16px;
+  padding: 0 8px;
 `;
 
 export const HomeButton = styled(Button)`

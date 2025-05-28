@@ -5,8 +5,9 @@ export const CartQuantityNumber = styled.div`
   justify-content: center;
   align-items: center;
   position: absolute;
-  right: 14px;
-  /* left: 10px; */
+  left: 10px;
+  /* right: 14px; */
+  /* left: 20px; */
   bottom: 24px;
   border: 2px solid #d81616;
   background: #fff;

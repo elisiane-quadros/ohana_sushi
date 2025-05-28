@@ -11,6 +11,7 @@ interface InputFormProps {
   errorMessage?: string;
   showErrorMessage?: boolean;
   props?: {};
+  containerWidth?: string;
   containerProps?: {};
   labelProps?: {};
   errorMessageProps?: {};
@@ -33,6 +34,7 @@ const InputForm = ({
   errorMessage = '',
   showErrorMessage = false,
   props = {},
+  containerWidth = '100%',
   containerProps = {},
   labelProps = {},
   errorMessageProps = {},
@@ -43,7 +45,7 @@ const InputForm = ({
   const { Text } = Typography;
 
   return (
-    <Flex vertical style={{ width: '100%' }} {...containerProps}>
+    <Flex vertical style={{ width: containerWidth }} {...containerProps}>
       <Text strong {...labelProps}>
         {label}
       </Text>

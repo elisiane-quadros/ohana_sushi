@@ -11,9 +11,9 @@ export const ShowcaseContainerFlex = styled(Flex)`
 
 export const ShowCaseFlex = styled(Flex)`
   width: 100%;
-  /* max-width: 1376px; */
-  max-width: 1472px;
-  padding: 32px 8px;
+  max-width: 1196px;
+  /* max-width: 1472px; */
+  padding: 32px 0;
 `;
 
 export const ProductTypeSelectFlex = styled(Flex)`

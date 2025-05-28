@@ -1,1 +1,9 @@
-type ProductType = 'COMBO' | 'PORTION' | 'ITEM' | 'DRINK' | 'OTHER';
+type ProductType =
+  | 'COMBO'
+  | 'PORTION'
+  | 'ITEM'
+  | 'DRINK'
+  | 'OTHER'
+  | 'URAMAKIS'
+  | 'HOTS'
+  | 'HOSSOS';

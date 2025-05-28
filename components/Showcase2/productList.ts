@@ -1393,6 +1393,78 @@ const productList: Product[] = [
       },
     ],
   },
+  {
+    id: 35,
+    title: 'Uramaki Filadélfia',
+    image: example,
+    price: 24.9,
+    type: 'URAMAKIS',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'Arroz',
+        quantity: 1,
+      },
+      {
+        id: 2,
+        name: 'Creme Cheese',
+        quantity: 1,
+      },
+      {
+        id: 3,
+        name: 'Salmão Cru',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 36,
+    title: 'Hot Filadélfia',
+    image: example,
+    price: 31.9,
+    type: 'HOTS',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'Creme Cheese',
+        quantity: 1,
+      },
+      {
+        id: 2,
+        name: 'Tarê',
+        quantity: 1,
+      },
+      {
+        id: 3,
+        name: 'Gergilim',
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 37,
+    title: 'Hossomaki Filadélfia',
+    image: example,
+    price: 22.9,
+    type: 'HOSSOS',
+    ingredientList: [
+      {
+        id: 1,
+        name: 'Salmão Cru',
+        quantity: 1,
+      },
+      {
+        id: 2,
+        name: 'Arroz',
+        quantity: 1,
+      },
+      {
+        id: 3,
+        name: 'Creme Cheese',
+        quantity: 1,
+      },
+    ],
+  },
 ];
 
 export default productList;
