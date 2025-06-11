@@ -39,8 +39,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const { Text } = require('antd').Typography;
-
   return (
     <html lang="pt-BR">
       <body
@@ -48,25 +46,25 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <ReduxAndAppProvider>
-          <Flex vertical>{children}</Flex>
-          <Flex
-            justify="center"
-            align="center"
-            style={{
-              height: '64px',
-              background: '#F7F7F7',
-              borderTop: '1px solid #d81616aa',
-            }}
-          >
+          <Flex vertical justify="space-between" style={{ minHeight: '100vh' }}>
+            <Flex vertical>{children}</Flex>
             <Flex
-              gap={2}
-              // align={!isXs ? 'center' : 'flex-start'}
-              // style={{ width: `${isXs ? '100%' : 'fit-content'}` }}
+              justify="center"
+              align="center"
+              gap={16}
+              style={{
+                height: '64px',
+                background: '#F7F7F7',
+                borderTop: '1px solid #d81616aa',
+              }}
             >
-              <Icon path={mdiWhatsapp} size={0.7} />
-              <span>(51) 99609-0597</span>
+              <Flex gap={4} align="center">
+                <Icon path={mdiWhatsapp} size={0.7} />
+                <span>(51) 99609-0597</span>
+              </Flex>
+              <span>-</span>
+              <span>@ohanasushi_delivery</span>
             </Flex>
-            <span>@ohanasushi_delivery</span>
           </Flex>
         </ReduxAndAppProvider>
       </body>
