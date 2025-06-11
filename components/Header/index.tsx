@@ -36,27 +36,16 @@ const Header: React.FC = () => {
             <Flex
               vertical
               gap={16}
-              // style={{ maxWidth: `${isMdDown ? '300px' : '430px'}` }}
-              style={{ maxWidth: '100%' }} // '460px' }}
+              style={{ maxWidth: '100%' }}
               className="neighborhoods"
             >
               <div />
-              {/* <Flex vertical>
-                <HeaderText isMdDown={isMdDown} isXs={isXs}>
-                  Sabores incríveis e qualidade só aqui no Ohana Sushi Delivery.
-                  Peça e experimente o melhor da comida japonesa na{' '}
-                  <HightLightText>*Zona Sul de Porto Alegre.</HightLightText>
-                </HeaderText>
-                <Text style={{ color: '#FFF', fontSize: '0.875rem' }}>
-                  * Confira a lista dos bairros que atendemos abaixo
-                </Text>
-              </Flex> */}
               <Popover
                 placement="bottomRight"
                 content={
                   <Flex
                     style={{
-                      maxWidth: isXs ? '90vw' : '430px',
+                      maxWidth: isXs ? '90vw' : '420px',
                       padding: '8px 12px 8px 12px',
                     }}
                   >

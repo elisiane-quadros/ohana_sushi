@@ -1,33 +1,56 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { Flex } from 'antd';
 import { useAppDispatch } from '@/hooks/redux';
 import { setShowCart } from '@/store/features/cart';
-import Showcase2 from '@/components/Showcase2';
-import Header from '@/components/Header';
-import MaintenanceStatus from '@/components/MaintenanceStatus';
+import FullScreenLoading from '@/components/Loadings/FullScreenLoading';
+
+// Lazy load apenas do componente principal
+const LazyShowcase = lazy(() => import('@/components/Showcase'));
+const LazyHeader = lazy(() => import('@/components/Header'));
+const LazyMaintenanceStatus = lazy(
+  () => import('@/components/MaintenanceStatus'),
+);
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const maintenanceStatus = true;
+  const maintenanceStatus = false;
+
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     dispatch(setShowCart(!maintenanceStatus));
-  }, [maintenanceStatus]);
+  }, [maintenanceStatus, dispatch]);
 
   return !maintenanceStatus ? (
     <Flex vertical>
-      <Header />
+      <Suspense
+        fallback={<div style={{ height: '80px', background: '#f0f0f0' }} />}
+      >
+        <LazyHeader />
+      </Suspense>
       <main style={{ maxWidth: '100vw' }}>
-        <Showcase2 />
+        <Suspense fallback={<FullScreenLoading />}>
+          <LazyShowcase
+            isNavigating={isNavigating}
+            setIsNavigating={setIsNavigating}
+          />
+        </Suspense>
       </main>
+      {isNavigating && <FullScreenLoading />}
     </Flex>
   ) : (
     <Flex vertical>
-      <Header />
+      <Suspense
+        fallback={<div style={{ height: '80px', background: '#f0f0f0' }} />}
+      >
+        <LazyHeader />
+      </Suspense>
       <main style={{ maxWidth: '100vw' }}>
-        <MaintenanceStatus />
+        <Suspense fallback={<FullScreenLoading />}>
+          <LazyMaintenanceStatus />
+        </Suspense>
       </main>
     </Flex>
   );

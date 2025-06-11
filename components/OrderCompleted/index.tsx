@@ -81,7 +81,11 @@ const OrderCompleted = () => {
   }, [orderList]);
 
   return (
-    <Flex vertical align="center" style={{ padding: '0 16px 32px 16px' }}>
+    <Flex
+      vertical
+      align="center"
+      style={{ padding: '16px 16px 32px 16px', background: '#f7f7f7' }}
+    >
       <Card
         style={{
           width: '100%',

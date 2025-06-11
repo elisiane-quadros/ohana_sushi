@@ -27,6 +27,10 @@ export const AppBarArea = styled.div`
   width: 1376px;
   height: 100px;
   padding: 0 8px;
+
+  @media (min-width: 768px) {
+    padding: 0 16px;
+  }
 `;
 
 export const HomeButton = styled(Button)`

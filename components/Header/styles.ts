@@ -43,7 +43,7 @@ export const HeaderContent = styled.div`
   padding: 100px 8px 16px 8px;
 
   @media (min-width: 768px) {
-    padding: 100px 8px 32px 8px;
+    padding: 100px 16px 32px 16px;
   }
 `;
 

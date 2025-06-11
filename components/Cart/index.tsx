@@ -15,17 +15,39 @@ import ChooseButton from '../ChooseButton';
 import useResponsive from '@/hooks/useResponsive';
 import InputSendCalculation from '../InputSendCalculation';
 import { DeliveryCost } from '@/interfaces/DeliveryCost';
+import { useRouter } from 'next/navigation';
 
-export const Cart = () => {
+interface CartProps {
+  isNavigating: boolean;
+  setIsNavigating: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const Cart = ({ isNavigating, setIsNavigating }: CartProps) => {
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
   const selectedNeighborhood: DeliveryCost | null = useAppSelector(
     (state) => state.neighborhood.neighborhood,
   );
   const { Text } = Typography;
   const { isXs } = useResponsive();
+  const router = useRouter();
 
+  // const [isNavigating, setIsNavigating] = useState(false);
   const [totalCartItems, setTotalCartItems] = useState<number | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
+
+  const handlePurchase = async () => {
+    if (!cart) return;
+
+    setIsNavigating(true);
+    setOpenPopover(false); // Fecha o popover imediatamente
+
+    try {
+      await router.push(`/carrinho/${cart.id}`);
+    } catch (error) {
+      console.error('Erro na navegação:', error);
+      setIsNavigating(false);
+    }
+  };
 
   const content = cart ? (
     <Flex
@@ -135,36 +157,21 @@ export const Cart = () => {
               </Flex>
             </Flex>
           ) : null}
-          {/* <Flex gap={4} justify="flex-end">
-            <Flex vertical style={{ width: '36px' }}>
-              <Text strong style={{ textAlign: 'center', lineHeight: 1.3 }}>
-                Items
-              </Text>
-              <Text style={{ textAlign: 'center', lineHeight: 1.3 }}>
-                {totalCartItems}
-              </Text>
-            </Flex>
-            <Flex vertical style={{ width: '80px' }}>
-              <Text strong style={{ textAlign: 'end', lineHeight: 1.3 }}>
-                Total
-              </Text>
-              <Text style={{ textAlign: 'end', lineHeight: 1.3 }}>
-                {new Intl.NumberFormat('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL',
-                }).format(cart.value)}
-              </Text>
-            </Flex>
-          </Flex> */}
         </Flex>
       </Flex>
       <SeeDetailsButtonContainer>
         <Divider style={{ margin: '8px 0' }} />
         {cart ? (
-          <Link href={`/carrinho/${cart.id}`}>
-            <ButtonPrimary style={{ width: '100%' }}>Comprar</ButtonPrimary>
-          </Link>
-        ) : null}
+          // <Link href={`/carrinho/${cart.id}`}>
+          <ButtonPrimary
+            style={{ width: '100%' }}
+            loading={isNavigating}
+            onClick={handlePurchase}
+          >
+            Comprar
+          </ButtonPrimary>
+        ) : // </Link>
+        null}
       </SeeDetailsButtonContainer>
     </Flex>
   ) : null;
@@ -208,11 +215,6 @@ export const Cart = () => {
         gap={12}
         style={{ height: '40px', position: 'relative' }}
       >
-        {/* {totalCartItems ? (
-          <ButtonPrimary style={{ width: '100%' }}>
-            Detalhes do carrinho
-          </ButtonPrimary>
-        ) : null} */}
         {totalCartItems ? (
           <CartQuantityNumber>
             <span>{totalCartItems}</span>

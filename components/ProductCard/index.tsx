@@ -1,12 +1,15 @@
 import { Product } from '@/interfaces/Product';
 import { ProductCardContainerFlex } from './styles';
 import Image from 'next/image';
-import { Divider, Flex, Typography } from 'antd';
+import { Button, Divider, Flex, Popover, Tag, Typography } from 'antd';
 import SunFamily from '../SunFamily';
 import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
 import ChooseButton from '../ChooseButton';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { useAppSelector } from '@/hooks/redux';
+import ButtonLink from '../ButtonLink';
+import useResponsive from '@/hooks/useResponsive';
+import { useEffect, useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
@@ -14,142 +17,130 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
-
   const { Title, Text } = Typography;
+  const { isMdDown, isXs } = useResponsive();
+
+  // const [hasProductInCart, setHasProductInCart] = useState<boolean>(false);
 
   const findProductQuantityInCart = (productId: number) => {
     if (cart) {
-      const product = cart.cartItemList.find((cil) => cil.id === productId);
-      if (product) {
-        return product.quantity;
+      const hasProduct = cart.cartItemList.find((cil) => cil.id === productId);
+      if (hasProduct && hasProduct.id) {
+        return true;
       }
-      return 0;
+      return false;
     }
-    return 0;
+    return false;
   };
 
   return (
-    <ProductCardContainerFlex vertical justify="space-between">
-      <Flex vertical style={{ width: '100%' }}>
-        <Flex
-          style={{ width: '100%', padding: '8px', background: '#d8161620' }}
-          justify="space-between"
-          align="center"
-        >
-          <Title level={5} style={{ margin: 0, fontSize: '16px' }}>
+    <ProductCardContainerFlex
+      vertical
+      justify="space-between"
+      style={{
+        minHeight: `${isXs ? '168px' : isMdDown ? '210px' : '240px'}`,
+        borderRadius: '4px',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: findProductQuantityInCart(product.id) ? '#d81616' : '',
+        boxShadow: findProductQuantityInCart(product.id)
+          ? '2px 2px 8px 1px #d81616aa'
+          : 'none',
+      }}
+    >
+      <Flex
+        vertical
+        style={{
+          padding: '8px',
+        }}
+      >
+        <Flex gap={4} align="center" justify="space-between">
+          <Title
+            level={5}
+            style={{
+              margin: 0,
+              fontSize: `${isMdDown ? '1.2rem' : '1.4rem'}`,
+              color: '#d81616',
+              fontWeight: 400,
+            }}
+          >
             {product.title}
           </Title>
-          {/* <SunFamily /> */}
+          <Tag style={{ marginInlineEnd: '0px' }} color="#000">
+            <Text
+              style={{
+                fontSize: '0.8rem',
+                color: '#fff',
+                lineHeight: 1.1,
+                fontWeight: 600,
+              }}
+            >
+              {product.type === 'COMBO'
+                ? `${calculateComboTotalItems(product.ingredientList)} peças`
+                : ''}
+            </Text>
+          </Tag>
         </Flex>
-        <Flex vertical gap={8} style={{ width: '100%', padding: '0 8px' }}>
-          <Flex align="center" justify="center" style={{ width: '100%' }}>
+        <Flex gap={8}>
+          <Flex>
             <Image
               src={product.image}
               alt="example"
-              height={180} // {229.5} // {191.7} // 213
-              width={240} // {306} // {255.6} // 284
+              height={180}
+              width={240}
+              style={{
+                width: `${isMdDown ? '100px' : '160px'}`,
+                height: `${isMdDown ? '75px' : '120px'}`,
+                background: '#fff',
+                borderRadius: '4px',
+              }}
             />
           </Flex>
-          <Divider style={{ margin: 0 }} />
-          <Text
-            style={{
-              fontSize: '0.8rem',
-              color: '#d81616',
-              lineHeight: 1.1,
-              fontWeight: 600,
-            }}
-          >
-            {product.type === 'COMBO'
-              ? `${calculateComboTotalItems(product.ingredientList)} peças`
-              : ''}
-          </Text>
-          <Flex vertical gap={4}>
-            {product.ingredientList.map((ingredient) => (
-              <Text
-                style={{
-                  fontSize: '0.8rem',
-                  color: '#000',
-                  lineHeight: 1.1,
-                }}
-              >
-                {ingredient.quantity} {ingredient.name}
-              </Text>
-            ))}
+          <Flex vertical gap={2} style={{ width: '100%' }}>
+            {product.ingredientList.map((ingredient) => {
+              return (
+                <Text
+                  key={ingredient.id}
+                  style={{
+                    fontSize: '0.875rem',
+                    color: '#000',
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {ingredient.quantity} {ingredient.name}
+                </Text>
+              );
+            })}
           </Flex>
         </Flex>
       </Flex>
       <Flex
         justify="space-between"
-        align="flex-end"
+        align="center"
         style={{
-          background: findProductQuantityInCart(product.id) ? '#d8161620' : '',
+          background: 'linear-gradient(to right, #d81616aa, #d8161633)',
           padding: '8px',
-          borderTop: '1px solid #d9d9d9',
+          borderTop: isXs ? 'none' : '1px solid #d9d9d9',
+          borderRadius: '0 0 2px 2px',
         }}
       >
-        <Flex vertical>
-          <Text
-            style={{
-              lineHeight: 1,
-              color: '#000',
-              fontWeight: 600,
-              fontSize: '0.8rem',
-            }}
-          >
-            unidade
-          </Text>
-          <Title
-            level={5}
-            style={{
-              marginBottom: 0,
-              marginTop: 0,
-              lineHeight: 1.2,
-              color: '#d81616',
-              height: '24px',
-              display: 'flex',
-              alignItems: 'flex-end',
-            }}
-          >
-            {new Intl.NumberFormat('pt-BR', {
-              style: 'currency',
-              currency: 'BRL',
-            }).format(product.price)}
-          </Title>
-        </Flex>
-        <Flex vertical align="flex-end" gap={6}>
-          {/* {findProductQuantityInCart(product.id) ? (
-            <Flex vertical gap={2}>
-              <Text
-                style={{
-                  lineHeight: 1,
-                  color: '#000',
-                  fontWeight: 600,
-                  fontSize: '0.8rem',
-                  textAlign: 'end',
-                }}
-              >
-                adicionado
-              </Text>
-              <Text
-                style={{
-                  lineHeight: 1,
-                  color: '#d81616',
-                  fontWeight: 600,
-                  fontSize: '0.8rem',
-                  textAlign: 'end',
-                }}
-              >
-                {new Intl.NumberFormat('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL',
-                }).format(
-                  product.price * findProductQuantityInCart(product.id),
-                )}
-              </Text>
-            </Flex>
-          ) : null} */}
-          <ChooseButton product={product} />
-        </Flex>
+        <Title
+          level={5}
+          style={{
+            marginBottom: 0,
+            marginTop: 0,
+            lineHeight: 1.2,
+            color: '#000',
+            fontSize: '1.3rem',
+            fontFamily: 'var(--inria-sans) !important',
+          }}
+        >
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(product.price)}
+        </Title>
+        <ChooseButton product={product} sunButton />
       </Flex>
     </ProductCardContainerFlex>
   );

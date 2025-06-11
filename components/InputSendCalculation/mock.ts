@@ -74,7 +74,7 @@ const deliveryCostList: DeliveryCost[] = [
   {
     id: 15,
     name: 'Vila Nova',
-    deliveryCost: 12,
+    deliveryCost: 14,
   },
   {
     id: 16,
@@ -120,6 +120,16 @@ const deliveryCostList: DeliveryCost[] = [
     id: 24,
     name: 'Glória',
     deliveryCost: 18,
+  },
+  {
+    id: 25,
+    name: 'Santa Tereza',
+    deliveryCost: 25,
+  },
+  {
+    id: 26,
+    name: 'Camaquã',
+    deliveryCost: 20,
   },
 ];
 

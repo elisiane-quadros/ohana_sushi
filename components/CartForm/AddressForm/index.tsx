@@ -1,11 +1,5 @@
 import { Alert, Col, Flex, Row, Typography } from 'antd';
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { AddressFormContainer, ErrorMessage } from './styles';
 import Icon from '@mdi/react';
 import { mdiMapMarkerRadiusOutline } from '@mdi/js';

@@ -1,33 +1,56 @@
-import { Collapse, Flex, Typography } from 'antd';
-import { useEffect, useState } from 'react';
-import productList from './productList';
-import { Product } from '@/interfaces/Product';
-import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
-import Image from 'next/image';
-import ChooseButton from '../ChooseButton';
-import { CartInterface } from '@/interfaces/CartInterface';
-import { useAppSelector } from '@/hooks/redux';
-import { Ingredient } from '@/interfaces/Ingredient';
+import { Carousel, Col, Flex, Row, Select } from 'antd';
+import {
+  ProductTypeTitle,
+  ProductTypeTitleFlex,
+  SearchAnFilterFlex,
+  ShowcaseContainerFlex,
+  ShowCaseFlex,
+} from './styles';
 
-interface ProductListByType {
-  id: number;
-  typeName: string;
-  productLists: Product[];
-  order: number;
+import './styles.css';
+import Icon from '@mdi/react';
+import { IoMdSwitch } from 'react-icons/io';
+import { mdiMagnify } from '@mdi/js';
+import InputForm from '../InputForm';
+import { Product } from '@/interfaces/Product';
+import { ChangeEvent, useEffect, useState, useTransition } from 'react';
+import productList from './productList';
+import ProductCard from '../ProductCard';
+import useResponsive from '@/hooks/useResponsive';
+import Cart from '../Cart';
+import FilterDrawer from './components/FilterDrawer';
+import ButtonLink from '../ButtonLink';
+import { ProductListByType } from './interfaces/ProductListByType';
+import ContainerLoading from '../Loadings/ContainerLoading';
+import SwitchFilter from '../SwitchFilter';
+
+interface ShowcaseProps {
+  isNavigating: boolean;
+  setIsNavigating: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Showcase = () => {
-  const { Title, Text } = Typography;
-  const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
-
+const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
+  const { isLgDown, isMdDown, isXs } = useResponsive();
   const [productListByType, setProductListByType] = useState<
     ProductListByType[]
   >([]);
+  const [productListByTypeFiltered, setProductListByTypeFiltered] = useState<
+    ProductListByType[]
+  >([]);
+  const [selectedProductType, setSelectedProductType] = useState<string[]>([
+    'ALL',
+  ]);
+  const [openFilterDrawer, setOpenFilterDrawer] = useState(false);
+  const [loadingList, setLoadingList] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const filterProductsByType = () => {
     let newComboList: Product[] = [];
     let newPortionList: Product[] = [];
     let newItemList: Product[] = [];
+    let newUramakisList: Product[] = [];
+    let newHotsList: Product[] = [];
+    let newHossosList: Product[] = [];
     let newDrinkList: Product[] = [];
     let newOtherList: Product[] = [];
 
@@ -42,6 +65,15 @@ const Showcase = () => {
         case 'ITEM':
           newItemList = [...newItemList, prod];
           break;
+        case 'URAMAKIS':
+          newUramakisList = [...newUramakisList, prod];
+          break;
+        case 'HOTS':
+          newHotsList = [...newHotsList, prod];
+          break;
+        case 'HOSSOS':
+          newHossosList = [...newHossosList, prod];
+          break;
         case 'DRINK':
           newDrinkList = [...newDrinkList, prod];
           break;
@@ -55,13 +87,20 @@ const Showcase = () => {
       let newProductListByType: ProductListByType[] = [];
       if (newComboList.length)
         newProductListByType = [
-          { id: 1, typeName: 'Combos', productLists: newComboList, order: 1 },
+          {
+            id: 1,
+            type: 'COMBO',
+            typeName: 'Combos',
+            productLists: newComboList,
+            order: 1,
+          },
         ];
       if (newPortionList.length)
         newProductListByType = [
           ...newProductListByType,
           {
             id: 2,
+            type: 'PORTION',
             typeName: 'Porções',
             productLists: newPortionList,
             order: 2,
@@ -70,43 +109,121 @@ const Showcase = () => {
       if (newItemList.length)
         newProductListByType = [
           ...newProductListByType,
-          { id: 3, typeName: 'Unidades', productLists: newItemList, order: 3 },
+          {
+            id: 3,
+            type: 'ITEM',
+            typeName: 'Unidades',
+            productLists: newItemList,
+            order: 3,
+          },
         ];
+      if (newUramakisList.length)
+        newProductListByType = [
+          ...newProductListByType,
+          {
+            id: 4,
+            type: 'URAMAKIS',
+            typeName: 'Uramakis',
+            productLists: newUramakisList,
+            order: 4,
+          },
+        ];
+      if (newHotsList.length) {
+        newProductListByType = [
+          ...newProductListByType,
+          {
+            id: 5,
+            type: 'HOTS',
+            typeName: 'Hots',
+            productLists: newHotsList,
+            order: 5,
+          },
+        ];
+      }
+      if (newHossosList.length) {
+        newProductListByType = [
+          ...newProductListByType,
+          {
+            id: 6,
+            type: 'HOSSOS',
+            typeName: 'Hossos',
+            productLists: newHossosList,
+            order: 6,
+          },
+        ];
+      }
       if (newDrinkList.length)
         newProductListByType = [
           ...newProductListByType,
-          { id: 4, typeName: 'Bebidas', productLists: newDrinkList, order: 4 },
+          {
+            id: 7,
+            type: 'DRINK',
+            typeName: 'Bebidas',
+            productLists: newDrinkList,
+            order: 7,
+          },
         ];
       if (newOtherList.length)
         newProductListByType = [
           ...newProductListByType,
-          { id: 5, typeName: 'Outros', productLists: newOtherList, order: 5 },
+          {
+            id: 8,
+            type: 'OTHER',
+            typeName: 'Outros',
+            productLists: newOtherList,
+            order: 8,
+          },
         ];
 
       newProductListByType.sort((a, b) => a.order - b.order);
 
       setProductListByType(newProductListByType);
+      setProductListByTypeFiltered(newProductListByType);
     });
   };
 
-  const mountIngredientTextList = (ingredientList: Ingredient[]) => {
-    let ingredientTextList = '';
-    ingredientList.map((ingredient, index: number) => {
-      let separator = index === ingredientList.length - 1 ? '.' : ', ';
-      ingredientTextList += `${ingredient.quantity} ${ingredient.name}${separator}`;
-    });
-    return ingredientTextList;
-  };
+  const handleProductFilter = (e: boolean, productType: ProductType) => {
+    setLoadingList(true);
 
-  const findProductQuantityInCart = (productId: number) => {
-    if (cart) {
-      const product = cart.cartItemList.find((cil) => cil.id === productId);
-      if (product) {
-        return product.quantity;
+    startTransition(() => {
+      if (productType === 'ALL' || (selectedProductType.length === 1 && !e)) {
+        setSelectedProductType(['ALL']);
+        setProductListByTypeFiltered(productListByType);
+        setLoadingList(false);
+        return;
       }
-      return 0;
-    }
-    return 0;
+
+      const newSelectedProductType = e
+        ? [...selectedProductType.filter((type) => type !== 'ALL'), productType]
+        : selectedProductType.filter((type) => type !== productType);
+
+      setSelectedProductType(newSelectedProductType);
+
+      const filteredProductListByType = productListByType.map((productType) => {
+        if (newSelectedProductType.includes(productType.type)) {
+          return productType;
+        }
+        return { ...productType, productLists: [] };
+      });
+
+      setProductListByTypeFiltered(filteredProductListByType);
+      setLoadingList(false);
+    });
+  };
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value.toLowerCase();
+    const filteredProductListByType = productListByType.map((productType) => {
+      const filteredProducts = productType.productLists.filter(
+        (product) =>
+          product.title.toLowerCase().includes(searchValue) ||
+          product.ingredientList.some((ingredient) =>
+            ingredient.name.toLowerCase().includes(searchValue),
+          ),
+      );
+      return { ...productType, productLists: filteredProducts };
+    });
+    setProductListByTypeFiltered(filteredProductListByType);
   };
 
   useEffect(() => {
@@ -114,163 +231,223 @@ const Showcase = () => {
   }, [productList]);
 
   return (
-    <Flex vertical align="center" gap={16} style={{ padding: '16px' }}>
-      {productListByType.map((productByType) => (
-        <Collapse
-          key={productByType.id}
-          bordered={false}
-          defaultActiveKey={['1']}
-          style={{ width: '1448px', background: 'transparent' }}
-          items={[
-            {
-              key: '1',
-              label: <span>{productByType.typeName}</span>,
-              children: (
-                <Flex
-                  gap={4}
-                  justify="space-evenly"
-                  align="stretch"
-                  style={{ wordWrap: 'break-word', flexWrap: 'wrap' }}
-                >
-                  {productByType.productLists.map((product: Product) => (
-                    <Flex
-                      vertical
-                      justify="space-between"
-                      gap={12}
-                      key={product.id}
-                      style={{
-                        background: '#FFF',
-                        padding: '12px',
-                        width: '280px',
-                      }}
-                    >
-                      <Flex vertical gap={8}>
-                        <Flex vertical>
-                          <Title
-                            level={5}
-                            style={{ marginBottom: 0, lineHeight: 1.2 }}
-                          >
-                            {product.title}
-                          </Title>
-                          <Text
-                            style={{
-                              fontSize: '0.8rem',
-                              color: '#555',
-                              lineHeight: 1.1,
-                            }}
-                          >
-                            {product.type === 'COMBO'
-                              ? `${calculateComboTotalItems(product.ingredientList)} peças`
-                              : ''}
-                          </Text>
-                        </Flex>
-                        <Image
-                          src={product.image}
-                          alt="example"
-                          height={191.7} // 213
-                          width={255.6} // 284
-                        />
-                        <Flex vertical>
-                          <Text
-                            style={{
-                              lineHeight: 1.2,
-                              color: '#333333aa',
-                              fontSize: '0.8rem',
-                            }}
-                          >
-                            {mountIngredientTextList(product.ingredientList)}
-                            {/* 10 hot camarão empanado, 10 hot alho poró, 10 hot
-                            cove, 10 hot doritos, 10 hot cheddar, 10 hot geleia
-                            de pimenta, 10 hot saladi. */}
-                          </Text>
-                          {/* {product.ingredientList.map((ingredient) => (
-                            <Text
-                              key={ingredient.id}
-                              style={{
-                                lineHeight: 1.2,
-                                color: '#555',
-                                fontSize: '0.8rem',
-                              }}
-                            >{`${ingredient.quantity.toString().padStart(2, '0')} ${ingredient.name}`}</Text>
-                          ))} */}
-                        </Flex>
-                      </Flex>
-                      <Flex
-                        justify="space-between"
-                        align="flex-end"
-                        style={{ height: '58px' }}
-                      >
-                        <Flex vertical>
-                          <Text
-                            style={{
-                              lineHeight: 1,
-                              color: '#555',
-                              fontWeight: 600,
-                              fontSize: '0.8rem',
-                            }}
-                          >
-                            unidade
-                          </Text>
-                          <Title
-                            level={5}
-                            style={{
-                              marginBottom: 0,
-                              marginTop: 0,
-                              lineHeight: 1.2,
-                            }}
-                          >
-                            {new Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            }).format(product.price)}
-                          </Title>
-                        </Flex>
-                        <Flex vertical align="flex-end" gap={6}>
-                          {findProductQuantityInCart(product.id) ? (
-                            <Flex vertical gap={2}>
-                              <Text
-                                style={{
-                                  lineHeight: 1,
-                                  color: '#555',
-                                  fontWeight: 600,
-                                  fontSize: '0.8rem',
-                                  textAlign: 'end',
-                                }}
-                              >
-                                adicionado
-                              </Text>
-                              <Text
-                                style={{
-                                  lineHeight: 1,
-                                  color: '#333',
-                                  fontWeight: 600,
-                                  fontSize: '0.8rem',
-                                  textAlign: 'end',
-                                }}
-                              >
-                                {new Intl.NumberFormat('pt-BR', {
-                                  style: 'currency',
-                                  currency: 'BRL',
-                                }).format(
-                                  product.price *
-                                    findProductQuantityInCart(product.id),
-                                )}
-                              </Text>
-                            </Flex>
-                          ) : null}
+    <ShowcaseContainerFlex vertical align="center">
+      <Flex
+        style={{
+          position: 'sticky',
+          top: 0,
+          width: '100%',
+          background: isMdDown ? '' : 'rgba(0, 0, 0, 0.85)',
+          boxShadow: '1.5px 1.5px 4px #d8161620 !important',
+          zIndex: 1000,
+          backdropFilter: 'blur(8px)',
+        }}
+        justify="center"
+        align="center"
+        vertical
+      >
+        <SearchAnFilterFlex
+          align="center"
+          justify="space-between"
+          className="show-case-flex"
+          gap={16}
+          style={{
+            background: isMdDown ? 'rgba(0, 0, 0, 0.85)' : '',
+          }}
+        >
+          <InputForm
+            placeholder="Buscar"
+            suffix={<Icon path={mdiMagnify} size={1} color="#d81616" />}
+            redStyled
+            onChange={handleSearch}
+            allowClear
+            props={{
+              style: {
+                width: isXs ? '100%' : '420px',
+              },
+            }}
+            containerWidth={isXs ? '100%' : '420px'}
+          />
+          <Cart isNavigating={isNavigating} setIsNavigating={setIsNavigating} />
+        </SearchAnFilterFlex>
+        {isMdDown ? (
+          <Flex
+            style={{ padding: '8px', width: '100%', background: '#f7f7f7' }}
+            justify="space-between"
+            gap={8}
+            className="md-down-showcase-filter"
+          >
+            <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+              value={
+                selectedProductType.includes('ALL')
+                  ? ['Todos']
+                  : productListByType
+                      .filter((productType) =>
+                        selectedProductType.includes(productType.type),
+                      )
+                      .map((productType) => productType.typeName)
+              }
+              onDeselect={(value) =>
+                handleProductFilter(
+                  false,
+                  productListByType.find((type) => type.typeName === value)
+                    ?.type || 'ALL',
+                )
+              }
+              onClear={() => handleProductFilter(true, 'ALL')}
+              showSearch={false}
+              open={false}
+              suffixIcon={null}
+            />
 
-                          <ChooseButton product={product} />
-                        </Flex>
-                      </Flex>
-                    </Flex>
-                  ))}
-                </Flex>
-              ),
-            },
-          ]}
-        />
-      ))}
-    </Flex>
+            <ButtonLink onClick={() => setOpenFilterDrawer(!openFilterDrawer)}>
+              <IoMdSwitch style={{ width: '1.5rem', height: '1.5rem' }} />{' '}
+              Filtros
+            </ButtonLink>
+            <FilterDrawer
+              open={openFilterDrawer}
+              onClose={() => setOpenFilterDrawer(false)}
+              selectedProductType={selectedProductType}
+              handleProductFilter={handleProductFilter}
+              productListByType={productListByType}
+              loading={loadingList || isPending}
+            />
+          </Flex>
+        ) : null}
+      </Flex>
+      <Flex
+        style={{
+          width: '100vw',
+          maxWidth: '1376px',
+          position: 'sticky',
+          top: 0,
+        }}
+      >
+        {!isMdDown ? (
+          <Flex
+            style={{
+              width: '180px',
+              padding: '32px 0px 16px 16px',
+              background: 'transparent',
+              position: 'sticky',
+              top: 72,
+              marginBottom: -72,
+              zIndex: 999,
+              height: '100vh',
+            }}
+            gap={8}
+            vertical
+          >
+            <SwitchFilter
+              label="Todos"
+              selectedProductType={selectedProductType.includes('ALL')}
+              handleProductFilter={() =>
+                handleProductFilter(selectedProductType.includes('ALL'), 'ALL')
+              }
+              loading={loadingList || isPending}
+              defaultChecked={true}
+            />
+            {productListByType.map((productType) => (
+              <SwitchFilter
+                label={productType.typeName}
+                selectedProductType={selectedProductType.includes(
+                  productType.type,
+                )}
+                handleProductFilter={() =>
+                  handleProductFilter(
+                    !selectedProductType.includes(productType.type),
+                    productType.type,
+                  )
+                }
+                loading={loadingList || isPending}
+              />
+            ))}
+          </Flex>
+        ) : null}
+        <ShowCaseFlex className="show-case-flex" vertical gap={32}>
+          {productListByTypeFiltered.map((productByType) =>
+            productByType.productLists.length ? (
+              <Flex vertical gap={16} key={productByType.id}>
+                {productByType.productLists.length ? (
+                  <ProductTypeTitleFlex id={productByType.type}>
+                    <ProductTypeTitle level={2}>
+                      {productByType.typeName}
+                    </ProductTypeTitle>
+                  </ProductTypeTitleFlex>
+                ) : null}
+
+                <Carousel
+                  arrows={
+                    isXs
+                      ? productByType.productLists.length > 3
+                      : isLgDown
+                        ? productByType.productLists.length > 4
+                        : productByType.productLists.length > 6
+                  }
+                  dots={
+                    isXs
+                      ? productByType.productLists.length > 3
+                      : isLgDown
+                        ? productByType.productLists.length > 4
+                        : productByType.productLists.length > 6
+                  }
+                  draggable={isLgDown}
+                  infinite={false}
+                  className="showcase-carousel"
+                >
+                  {Array.from({
+                    length: Math.ceil(
+                      isXs
+                        ? productByType.productLists.length / 3
+                        : isLgDown
+                          ? productByType.productLists.length / 4
+                          : productByType.productLists.length / 6,
+                    ),
+                  }).map((_, index) => {
+                    const start = isXs
+                      ? index * 3
+                      : isLgDown
+                        ? index * 4
+                        : index * 6;
+                    const productsChunk = productByType.productLists.slice(
+                      start,
+                      isXs ? start + 3 : isLgDown ? start + 4 : start + 6,
+                    );
+
+                    return (
+                      <div key={index}>
+                        <Row
+                          gutter={isXs ? [0, 8] : [16, 16]}
+                          style={{
+                            padding: isXs ? '0 36px 48px 36px' : '0 48px 48px',
+                          }}
+                        >
+                          {productsChunk.map((product) => (
+                            <Col
+                              xl={8}
+                              lg={12}
+                              md={12}
+                              xs={24}
+                              key={product.id}
+                              style={{ display: 'flex' }}
+                            >
+                              <ProductCard product={product} />
+                            </Col>
+                          ))}
+                        </Row>
+                      </div>
+                    );
+                  })}
+                </Carousel>
+              </Flex>
+            ) : null,
+          )}
+          {(loadingList || isPending) && <ContainerLoading />}
+        </ShowCaseFlex>
+      </Flex>
+    </ShowcaseContainerFlex>
   );
 };
 

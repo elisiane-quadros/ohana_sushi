@@ -124,3 +124,37 @@
 .showcase-carousel .slick-dots-bottom:not(.slick-active) button {
   background: #d81616 !important;
 }
+
+.showcase-switch .ant-switch.ant-switch-checked {
+  background: #d81616 !important;
+}
+
+.showcase-switch .ant-switch:not(.ant-switch.ant-switch-checked) {
+  background: #d8161660 !important;
+}
+
+.md-down-showcase-filter .ant-select-selector {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.md-down-showcase-filter .ant-select-selector:hover {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.md-down-showcase-filter .ant-select-selector:focus {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.md-down-showcase-filter .ant-select-selector:active {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}

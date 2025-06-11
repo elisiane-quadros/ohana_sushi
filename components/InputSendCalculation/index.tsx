@@ -119,8 +119,9 @@ const InputSendCalculation = ({
       };
 
       dispatch(setCart(newCart));
+      handleNeighborhood(newDeliveryCost?.id || '');
     }
-  }, [addressForm?.neighborhood]);
+  }, [addressForm?.neighborhood, addressForm?.zipCode]);
 
   return (
     <Flex vertical style={{ width: '100%' }} {...containerProps}>

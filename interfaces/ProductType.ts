@@ -1,4 +1,5 @@
 type ProductType =
+  | 'ALL'
   | 'COMBO'
   | 'PORTION'
   | 'ITEM'

@@ -15,6 +15,7 @@ type Breakpoints = {
   isXlDown: boolean; // NOTE: screen < 1600px
   isXlUp: boolean; // NOTE: screen >= 1200px
   isXxl: boolean; // NOTE: screen >= 1600px
+  // is1392Down: boolean; // NOTE: screen < 1392px
 };
 
 const useResponsive = (): Breakpoints => {
@@ -70,6 +71,10 @@ const useResponsive = (): Breakpoints => {
 
     // Extra Extra Large
     isXxl: screens.xxl === true,
+
+    // Custom breakpoint for 1392px
+    // is1392Down:
+    //   typeof window !== 'undefined' ? window.innerWidth < 1392 : false,
   };
 };
 

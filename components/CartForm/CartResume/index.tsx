@@ -190,7 +190,7 @@ const CartResume = ({
                     {new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
-                    }).format(addressForm.deliveryCost)}
+                    }).format(cart.deliveryCost)}
                   </Text>
                 </Flex>
                 <Flex justify="space-between">
@@ -199,7 +199,7 @@ const CartResume = ({
                     {new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
-                    }).format(cart.value + addressForm.deliveryCost)}
+                    }).format(cart.value + cart.deliveryCost)}
                   </Text>
                 </Flex>
               </Flex>

@@ -74,8 +74,8 @@ const AppBar = () => {
             </ButtonLink>
           </Flex>
         </Flex>
-        <Flex>
-          <Text
+        <Flex vertical>
+          {/* <Text
             style={{
               fontWeight: 600,
               color: '#d81616',
@@ -83,7 +83,27 @@ const AppBar = () => {
               textAlign: 'right',
             }}
           >
-            Atendemos todos os dias das 18:30h à 00:00h
+            Atendimento:
+          </Text> */}
+          <Text
+            style={{
+              fontWeight: 600,
+              color: '#d81616',
+              fontSize: isXs ? '0.875rem' : '1.25rem',
+              textAlign: 'right',
+            }}
+          >
+            11:30h às 14h de Seg. à Sáb
+          </Text>
+          <Text
+            style={{
+              fontWeight: 600,
+              color: '#d81616',
+              fontSize: isXs ? '0.875rem' : '1.25rem',
+              textAlign: 'right',
+            }}
+          >
+            18:30h à 0h todos os dias
           </Text>
         </Flex>
       </AppBarArea>

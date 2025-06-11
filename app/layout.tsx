@@ -4,6 +4,8 @@ import { Kaushan_Script, Inria_Sans, Montserrat } from 'next/font/google';
 import './globals.css';
 import ReduxAndAppProvider from '@/providers/ReduxAndAppProvider';
 import { Flex } from 'antd';
+import Icon from '@mdi/react';
+import { mdiWhatsapp } from '@mdi/js';
 
 const kaushanScript = Kaushan_Script({
   subsets: ['latin'],
@@ -37,6 +39,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const { Text } = require('antd').Typography;
+
   return (
     <html lang="pt-BR">
       <body
@@ -45,6 +49,25 @@ export default function RootLayout({
       >
         <ReduxAndAppProvider>
           <Flex vertical>{children}</Flex>
+          <Flex
+            justify="center"
+            align="center"
+            style={{
+              height: '64px',
+              background: '#F7F7F7',
+              borderTop: '1px solid #d81616aa',
+            }}
+          >
+            <Flex
+              gap={2}
+              // align={!isXs ? 'center' : 'flex-start'}
+              // style={{ width: `${isXs ? '100%' : 'fit-content'}` }}
+            >
+              <Icon path={mdiWhatsapp} size={0.7} />
+              <span>(51) 99609-0597</span>
+            </Flex>
+            <span>@ohanasushi_delivery</span>
+          </Flex>
         </ReduxAndAppProvider>
       </body>
     </html>
