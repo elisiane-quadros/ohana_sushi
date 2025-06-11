@@ -362,7 +362,7 @@ const OrderCompleted = () => {
           <Col xs={24} md={24} lg={10}>
             {currentOrder?.paymentMethod ? (
               <ButtonWhatsapp
-                whatsappNumber="48991385686" // "51996090597"
+                whatsappNumber="51996090597"
                 whatsappText={createOrderMessage(
                   currentOrder?.addressForm,
                   currentOrder?.paymentMethod,
