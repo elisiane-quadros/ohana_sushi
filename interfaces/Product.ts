@@ -1,11 +1,11 @@
-import { StaticImageData } from 'next/image';
 import { Ingredient } from './Ingredient';
 
 export interface Product {
   id: number;
   title: string;
-  image: StaticImageData;
+  image: string; // StaticImageData;
   price: number;
   type: ProductType;
+  order: number;
   ingredientList: Ingredient[];
 }

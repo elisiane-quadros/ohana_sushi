@@ -1,6 +1,5 @@
 import { Product } from '@/interfaces/Product';
 import { ProductCardContainerFlex } from './styles';
-import Image from 'next/image';
 import { Button, Divider, Flex, Popover, Tag, Typography } from 'antd';
 import SunFamily from '../SunFamily';
 import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
@@ -10,6 +9,7 @@ import { useAppSelector } from '@/hooks/redux';
 import ButtonLink from '../ButtonLink';
 import useResponsive from '@/hooks/useResponsive';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface ProductCardProps {
   product: Product;
@@ -19,8 +19,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
   const { Title, Text } = Typography;
   const { isMdDown, isXs } = useResponsive();
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
 
-  // const [hasProductInCart, setHasProductInCart] = useState<boolean>(false);
+  const handleImageError = (error: any) => {
+    console.log('Erro ao carregar imagem:', error);
+    console.log('URL da imagem:', product.image);
+    setImageError(true);
+  };
+
+  const handleImageLoad = () => {
+    console.log('Imagem carregada com sucesso:', product.image);
+    setImageLoading(false);
+  };
 
   const findProductQuantityInCart = (productId: number) => {
     if (cart) {
@@ -83,20 +94,43 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </Flex>
         <Flex gap={8}>
           <Flex>
-            <Image
-              src={product.image}
-              alt="example"
-              height={180}
-              width={240}
-              style={{
-                width: `${isMdDown ? '100px' : '160px'}`,
-                height: `${isMdDown ? '75px' : '120px'}`,
-                background: '#fff',
-                borderRadius: '4px',
-              }}
-            />
+            {imageError ? (
+              <div
+                style={{
+                  width: `${isMdDown ? '100px' : '160px'}`,
+                  height: `${isMdDown ? '75px' : '120px'}`,
+                  background: '#f0f0f0',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#999',
+                }}
+              >
+                <Text style={{ fontSize: '0.8rem' }}>
+                  Imagem não disponível
+                </Text>
+              </div>
+            ) : (
+              <Image
+                src={product.image}
+                alt={product.title}
+                height={180}
+                width={240}
+                style={{
+                  width: `${isMdDown ? '100px' : '160px'}`,
+                  height: `${isMdDown ? '75px' : '120px'}`,
+                  background: imageLoading ? '#f0f0f0' : '#fff',
+                  borderRadius: '4px',
+                  objectFit: 'cover',
+                }}
+                onError={handleImageError}
+                onLoad={handleImageLoad}
+                unoptimized={true}
+              />
+            )}
           </Flex>
-          <Flex vertical gap={2} style={{ width: '100%' }}>
+          <Flex vertical gap={6} style={{ width: '100%' }}>
             {product.ingredientList.map((ingredient) => {
               return (
                 <Text
@@ -107,7 +141,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     lineHeight: 1.1,
                   }}
                 >
-                  {ingredient.quantity} {ingredient.name}
+                  {ingredient.quantity} - {ingredient.name}
                 </Text>
               );
             })}

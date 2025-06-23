@@ -47,6 +47,10 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
   const filterProductsByType = () => {
     let newComboList: Product[] = [];
     let newPortionList: Product[] = [];
+    let newPokesList: Product[] = [];
+    let newYakisobaList: Product[] = [];
+    let newMegaHotList: Product[] = [];
+    let newTemakiList: Product[] = [];
     let newItemList: Product[] = [];
     let newUramakisList: Product[] = [];
     let newHotsList: Product[] = [];
@@ -61,6 +65,18 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
           break;
         case 'PORTION':
           newPortionList = [...newPortionList, prod];
+          break;
+        case 'POKES':
+          newPokesList = [...newPokesList, prod];
+          break;
+        case 'YAKISOBA':
+          newYakisobaList = [...newYakisobaList, prod];
+          break;
+        case 'MEGA_HOT':
+          newMegaHotList = [...newMegaHotList, prod];
+          break;
+        case 'TEMAKI':
+          newTemakiList = [...newTemakiList, prod];
           break;
         case 'ITEM':
           newItemList = [...newItemList, prod];
@@ -90,7 +106,7 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
           {
             id: 1,
             type: 'COMBO',
-            typeName: 'Combos',
+            typeName: 'Combinados',
             productLists: newComboList,
             order: 1,
           },
@@ -106,37 +122,81 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
             order: 2,
           },
         ];
-      if (newItemList.length)
+      if (newPokesList.length)
         newProductListByType = [
           ...newProductListByType,
           {
             id: 3,
+            type: 'POKES',
+            typeName: 'Pokes',
+            productLists: newPokesList,
+            order: 3,
+          },
+        ];
+      if (newYakisobaList.length)
+        newProductListByType = [
+          ...newProductListByType,
+          {
+            id: 4,
+            type: 'YAKISOBA',
+            typeName: 'Yakisobas',
+            productLists: newYakisobaList,
+            order: 4,
+          },
+        ];
+      if (newMegaHotList.length)
+        newProductListByType = [
+          ...newProductListByType,
+          {
+            id: 5,
+            type: 'MEGA_HOT',
+            typeName: 'Mega Hots',
+            productLists: newMegaHotList,
+            order: 5,
+          },
+        ];
+      if (newTemakiList.length)
+        newProductListByType = [
+          ...newProductListByType,
+          {
+            id: 6,
+            type: 'TEMAKI',
+            typeName: 'Temakis',
+            productLists: newTemakiList,
+            order: 6,
+          },
+        ];
+      if (newItemList.length)
+        newProductListByType = [
+          ...newProductListByType,
+          {
+            id: 7,
             type: 'ITEM',
             typeName: 'Unidades',
             productLists: newItemList,
-            order: 3,
+            order: 7,
           },
         ];
       if (newUramakisList.length)
         newProductListByType = [
           ...newProductListByType,
           {
-            id: 4,
+            id: 8,
             type: 'URAMAKIS',
             typeName: 'Uramakis',
             productLists: newUramakisList,
-            order: 4,
+            order: 8,
           },
         ];
       if (newHotsList.length) {
         newProductListByType = [
           ...newProductListByType,
           {
-            id: 5,
+            id: 9,
             type: 'HOTS',
             typeName: 'Hots',
             productLists: newHotsList,
-            order: 5,
+            order: 9,
           },
         ];
       }
@@ -144,11 +204,11 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
         newProductListByType = [
           ...newProductListByType,
           {
-            id: 6,
+            id: 10,
             type: 'HOSSOS',
             typeName: 'Hossos',
             productLists: newHossosList,
-            order: 6,
+            order: 10,
           },
         ];
       }
@@ -156,22 +216,22 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
         newProductListByType = [
           ...newProductListByType,
           {
-            id: 7,
+            id: 11,
             type: 'DRINK',
             typeName: 'Bebidas',
             productLists: newDrinkList,
-            order: 7,
+            order: 11,
           },
         ];
       if (newOtherList.length)
         newProductListByType = [
           ...newProductListByType,
           {
-            id: 8,
+            id: 12,
             type: 'OTHER',
             typeName: 'Outros',
             productLists: newOtherList,
-            order: 8,
+            order: 12,
           },
         ];
 
