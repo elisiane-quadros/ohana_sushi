@@ -31,6 +31,8 @@ import { useEffect, useState } from 'react';
 import generatePixPayload from '@/utils/generatePixPayload';
 import PixQRCodeModal from '../PixQRCodeModal';
 import { useRouter } from 'next/navigation';
+import { pixKey } from '@/utils/pixKey';
+import ProductInList from '../ProductInList';
 
 const OrderCompleted = () => {
   const router = useRouter();
@@ -45,7 +47,7 @@ const OrderCompleted = () => {
   const handleCopyToClipboard = async (type: 'KEY' | 'CODE') => {
     try {
       if (type === 'KEY') {
-        await navigator.clipboard.writeText('51996090597');
+        await navigator.clipboard.writeText(pixKey);
         messageApi.open({
           type: 'success',
           content: 'Chave PIX copiada!',
@@ -54,7 +56,10 @@ const OrderCompleted = () => {
       }
       if (type === 'CODE' && currentOrder) {
         await navigator.clipboard.writeText(
-          generatePixPayload(currentOrder.cartList[0].value) || '',
+          generatePixPayload(
+            currentOrder.cartList[0].value +
+              currentOrder.cartList[0].deliveryCost,
+          ) || '',
         );
         messageApi.open({
           type: 'success',
@@ -69,7 +74,10 @@ const OrderCompleted = () => {
   const alertMessage = () => (
     <Flex vertical>
       <Title level={2}>Pedido encaminhado!</Title>
-      <Text>Conclua seu pedido pelo Whatsapp</Text>
+      <Text>
+        {currentOrder?.addressForm.name}, Muito obrigado pela preferância!
+      </Text>
+      {/* <Text>Conclua seu pedido pelo Whatsapp</Text> */}
     </Flex>
   );
 
@@ -105,6 +113,33 @@ const OrderCompleted = () => {
             <Row gutter={isMdUp ? [16, 16] : [32, 32]}>
               <Col xs={24} md={14} lg={8}>
                 <Flex align="center" gap={8} style={{ margin: '0 0 16px 0' }}>
+                  <Icon
+                    path={mdiMapMarkerRadiusOutline}
+                    size={1}
+                    color="#d81616"
+                  />
+                  <Title level={5} style={{ marginBottom: 0 }}>
+                    Contato
+                  </Title>
+                </Flex>
+                <Flex vertical>
+                  <Flex gap={4}>
+                    <Text style={{ width: 'auto' }}>
+                      <Text strong>Nome:</Text> {currentOrder.addressForm.name}
+                    </Text>
+                  </Flex>
+                  <Flex gap={4}>
+                    <Text style={{ width: 'auto' }}>
+                      <Text strong>Whatsapp:</Text>{' '}
+                      {currentOrder.addressForm.phone}
+                    </Text>
+                  </Flex>
+                </Flex>
+                <Flex
+                  align="center"
+                  gap={8}
+                  style={{ margin: '16px 0 16px 0' }}
+                >
                   <Icon
                     path={mdiMapMarkerRadiusOutline}
                     size={1}
@@ -173,18 +208,13 @@ const OrderCompleted = () => {
                           handleCopyToClipboard('KEY');
                         }}
                       >
-                        pix: 51996090597
+                        pix: {pixKey}
                       </Button>
                     ) : null}
                   </Flex>
                   {currentOrder.paymentMethod.type === 'PIX' ? (
                     <Flex vertical gap={12}>
                       <ButtonPrimary
-                        // style={{
-                        //   padding: '0 30px',
-                        //   // height: '24px',
-                        //   width: '100%',
-                        // }}
                         icon={<Icon path={mdiContentCopy} size={0.7} />}
                         onClick={(e) => {
                           e.stopPropagation(); // Previne que o clique propague para o PaymentMethodButton
@@ -202,7 +232,10 @@ const OrderCompleted = () => {
                       <PixQRCodeModal
                         isQRCodeModalOpen={isQRCodeModalOpen}
                         onIsQRCodeModalOpen={setIsQRCodeModalOpen}
-                        value={currentOrder.cartList[0].value}
+                        value={
+                          currentOrder.cartList[0].value +
+                          currentOrder.cartList[0].deliveryCost
+                        }
                       />
                     </Flex>
                   ) : null}
@@ -229,101 +262,129 @@ const OrderCompleted = () => {
                     Itens
                   </Title>
                 </Flex>
-                <Flex
-                  vertical
-                  gap={8}
-                  // style={{ paddingLeft: isXs ? '16px' : '0' }}
-                >
-                  {currentOrder.cartList[0].cartItemList.map((item) => {
-                    return (
-                      <Flex vertical>
-                        <Flex
-                          style={{ width: '100%', padding: '4px 0' }}
-                          gap={4}
-                          key={item.id}
-                        >
-                          <Image
-                            src={item.product.image}
-                            alt="example"
-                            height={31.95}
-                            width={42.6}
-                          />
-                          <Flex
-                            vertical
-                            justify="space-between"
-                            style={{ width: '100%' }}
-                            gap={2}
-                          >
-                            <Flex style={{ width: '100%' }} gap={4}>
-                              <Text
-                                style={{ fontWeight: 600, lineHeight: 1.1 }}
-                              >
-                                {item.product.title}
-                              </Text>
-                              {item.product.type === 'COMBO' ? (
-                                <Text
-                                  style={{
-                                    lineHeight: 1.1,
-                                    fontSize: '12.8px',
-                                  }}
-                                >
-                                  {`${calculateComboTotalItems(item.product.ingredientList)} peças`}
-                                </Text>
-                              ) : null}
-                            </Flex>
-                            <Flex
-                              justify="space-between"
-                              align="flex-end"
-                              style={{ width: '100%' }}
-                            >
-                              <Flex align="flex-end" gap={4}>
-                                <Text
-                                  style={{
-                                    fontSize: '12.8px',
-                                    lineHeight: 1,
-                                    fontWeight: 600,
-                                  }}
-                                >
-                                  val. unitário:
-                                </Text>
-                                <Text style={{ lineHeight: 1 }}>
-                                  {new Intl.NumberFormat('pt-BR', {
-                                    style: 'currency',
-                                    currency: 'BRL',
-                                  }).format(item.product.price)}
-                                </Text>
-                              </Flex>
-                              <Flex align="flex-end" gap={4}>
-                                <Text
-                                  style={{ lineHeight: 1 }}
-                                >{`x${item.quantity}`}</Text>
-                                <Text
-                                  style={{
-                                    width: '72px',
-                                    textAlign: 'end',
-                                    lineHeight: 1,
-                                  }}
-                                >
-                                  {new Intl.NumberFormat('pt-BR', {
-                                    style: 'currency',
-                                    currency: 'BRL',
-                                  }).format(item.product.price * item.quantity)}
-                                </Text>
-                              </Flex>
-                            </Flex>
-                          </Flex>
-                        </Flex>
-                      </Flex>
-                    );
-                  })}
+                <Flex vertical gap={8}>
+                  {currentOrder.cartList[0].cartItemList.map(
+                    (item) => (
+                      <ProductInList
+                        key={item.id}
+                        item={item}
+                        hideChooseButtonInProductModal
+                        hideControls
+                        showQuantity
+                      />
+                    ),
+                    // {
+                    //   return (
+                    //     <Flex vertical>
+                    //       <Flex
+                    //         style={{ width: '100%', padding: '4px 0' }}
+                    //         gap={4}
+                    //         key={item.id}
+                    //       >
+                    //         <Image
+                    //           src={item.product.image}
+                    //           alt="example"
+                    //           height={31.95}
+                    //           width={42.6}
+                    //         />
+                    //         <Flex
+                    //           vertical
+                    //           justify="space-between"
+                    //           style={{ width: '100%' }}
+                    //           gap={2}
+                    //         >
+                    //           <Flex style={{ width: '100%' }} gap={4}>
+                    //             <Text
+                    //               style={{ fontWeight: 600, lineHeight: 1.1 }}
+                    //             >
+                    //               {item.product.title}
+                    //             </Text>
+                    //             {item.product.type === 'COMBO' ? (
+                    //               <Text
+                    //                 style={{
+                    //                   lineHeight: 1.1,
+                    //                   fontSize: '12.8px',
+                    //                 }}
+                    //               >
+                    //                 {`${calculateComboTotalItems(item.product.ingredientList)} peças`}
+                    //               </Text>
+                    //             ) : null}
+                    //           </Flex>
+                    //           <Flex
+                    //             justify="space-between"
+                    //             align="flex-end"
+                    //             style={{ width: '100%' }}
+                    //           >
+                    //             <Flex align="flex-end" gap={4}>
+                    //               <Text
+                    //                 style={{
+                    //                   fontSize: '12.8px',
+                    //                   lineHeight: 1,
+                    //                   fontWeight: 600,
+                    //                 }}
+                    //               >
+                    //                 val. unitário:
+                    //               </Text>
+                    //               <Text style={{ lineHeight: 1 }}>
+                    //                 {new Intl.NumberFormat('pt-BR', {
+                    //                   style: 'currency',
+                    //                   currency: 'BRL',
+                    //                 }).format(item.product.price)}
+                    //               </Text>
+                    //             </Flex>
+                    //             <Flex align="flex-end" gap={4}>
+                    //               <Text
+                    //                 style={{ lineHeight: 1 }}
+                    //               >{`x${item.quantity}`}</Text>
+                    //               <Text
+                    //                 style={{
+                    //                   width: '72px',
+                    //                   textAlign: 'end',
+                    //                   lineHeight: 1,
+                    //                 }}
+                    //               >
+                    //                 {new Intl.NumberFormat('pt-BR', {
+                    //                   style: 'currency',
+                    //                   currency: 'BRL',
+                    //                 }).format(item.product.price * item.quantity)}
+                    //               </Text>
+                    //             </Flex>
+                    //           </Flex>
+                    //         </Flex>
+                    //       </Flex>
+                    //     </Flex>
+                    //   );
+                    // }
+                  )}
                   <Divider style={{ margin: '8px 0' }} />
+                  <Flex justify="space-between">
+                    <Text style={{ fontWeight: 600 }}>Total de itens:</Text>
+                    <Text>
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(currentOrder.cartList[0].value)}
+                    </Text>
+                  </Flex>
+                  <Flex justify="space-between">
+                    <Text style={{ fontWeight: 600 }}>Valor da entrega:</Text>
+                    <Text>
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(currentOrder.cartList[0].deliveryCost)}
+                    </Text>
+                  </Flex>
                   <Flex justify="space-between">
                     <Text style={{ fontWeight: 600 }}>Total da compra:</Text>
                     <Text>
                       {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
-                      }).format(currentOrder.cartList[0].value)}
+                      }).format(
+                        currentOrder.cartList[0].value +
+                          currentOrder.cartList[0].deliveryCost,
+                      )}
                     </Text>
                   </Flex>
                 </Flex>

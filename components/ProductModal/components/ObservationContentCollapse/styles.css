@@ -1,0 +1,13 @@
+.observation-text-area {
+  padding-right: 80px !important;
+  min-height: 64px !important;
+}
+
+.observation-text-area:hover {
+  border-color: #d8161680 !important;
+}
+
+.observation-text-area:focus {
+  border-color: #d8161680 !important;
+  box-shadow: 0 0 0 2px rgba(216, 22, 22, 0.2) !important;
+}

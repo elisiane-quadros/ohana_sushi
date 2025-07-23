@@ -1,3 +1,4 @@
+import useResponsive from '@/hooks/useResponsive';
 import { Flex, Switch } from 'antd';
 
 interface SwitchFilterProps {
@@ -15,19 +16,18 @@ const SwitchFilter = ({
   loading = false,
   defaultChecked = false,
 }: SwitchFilterProps) => {
-  console.log('1');
-
+  const { isXxl } = useResponsive();
   return (
     <Flex
       align="center"
       justify="space-between"
       gap={8}
       style={{
-        borderRadius: '4px',
-        padding: '8px 16px',
-        border: '1px solid #d9d9d9',
-        boxShadow: '2px 2px 4px #d8161630',
-        background: '#fff',
+        borderRadius: isXxl ? '4px' : '0',
+        padding: isXxl ? '8px 16px' : '4px',
+        border: isXxl ? '1px solid #d9d9d9' : 'none',
+        boxShadow: isXxl ? '2px 2px 4px #d8161630' : 'none',
+        background: isXxl ? '#fff' : 'transparent',
         cursor: 'pointer',
       }}
       className="showcase-switch"

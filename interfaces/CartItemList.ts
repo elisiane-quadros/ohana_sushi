@@ -4,4 +4,5 @@ export interface CartItemList {
   id: number;
   product: Product;
   quantity: number;
+  observation?: string;
 }

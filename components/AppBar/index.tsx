@@ -93,7 +93,7 @@ const AppBar = () => {
               textAlign: 'right',
             }}
           >
-            11:30h às 14h de Seg. à Sáb
+            11h às 15h de Seg. à Sáb
           </Text>
           <Text
             style={{
@@ -103,7 +103,7 @@ const AppBar = () => {
               textAlign: 'right',
             }}
           >
-            18:30h à 0h todos os dias
+            18h à 0h todos os dias
           </Text>
         </Flex>
       </AppBarArea>

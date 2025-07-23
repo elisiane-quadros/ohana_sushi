@@ -1,0 +1,21 @@
+.observation-container {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.observation-container .ant-collapse {
+  width: 100%;
+}
+
+.observation-container .ant-collapse-header {
+  padding: 0 !important;
+}
+
+.observation-container .ant-collapse-arrow {
+  color: #d81616 !important;
+}
+
+.observation-container .ant-collapse-content-box {
+  margin-top: 8px;
+  padding: 0 !important;
+}

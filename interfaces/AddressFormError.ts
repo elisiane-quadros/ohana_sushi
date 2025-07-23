@@ -1,4 +1,5 @@
 export interface AddressFormError {
+  name: boolean;
   phone: boolean;
   streetName: boolean;
   number: boolean;

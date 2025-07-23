@@ -30,7 +30,7 @@ interface ShowcaseProps {
 }
 
 const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
-  const { isLgDown, isMdDown, isXs } = useResponsive();
+  const { isXxl, isLg, isLgDown, isMdDown, isXs } = useResponsive();
   const [productListByType, setProductListByType] = useState<
     ProductListByType[]
   >([]);
@@ -332,7 +332,12 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
         </SearchAnFilterFlex>
         {isMdDown ? (
           <Flex
-            style={{ padding: '8px', width: '100%', background: '#f7f7f7' }}
+            style={{
+              padding: '8px',
+              width: '100%',
+              background: '#f7f7f7',
+              boxShadow: '2px 2px 4px #00000030',
+            }}
             justify="space-between"
             gap={8}
             className="md-down-showcase-filter"
@@ -377,15 +382,71 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
           </Flex>
         ) : null}
       </Flex>
+      {!isXxl && !isMdDown ? (
+        <Flex
+          justify="center"
+          style={{
+            width: '100%',
+            boxShadow: '2px 2px 4px #00000030',
+            background: '#f7f7f7',
+            position: 'sticky',
+            top: 72,
+            zIndex: 999,
+          }}
+        >
+          <Flex
+            style={{
+              width: '100%',
+              maxWidth: '1344px',
+              padding: '8px 16px',
+            }}
+            gap={8}
+            wrap="wrap"
+            vertical={isXxl}
+          >
+            <SwitchFilter
+              label="Todos"
+              selectedProductType={selectedProductType.includes('ALL')}
+              handleProductFilter={() =>
+                handleProductFilter(selectedProductType.includes('ALL'), 'ALL')
+              }
+              loading={loadingList || isPending}
+              defaultChecked={true}
+            />
+            {productListByType.map((productType) => (
+              <SwitchFilter
+                label={productType.typeName}
+                selectedProductType={selectedProductType.includes(
+                  productType.type,
+                )}
+                handleProductFilter={() =>
+                  handleProductFilter(
+                    !selectedProductType.includes(productType.type),
+                    productType.type,
+                  )
+                }
+                loading={loadingList || isPending}
+              />
+            ))}
+          </Flex>
+        </Flex>
+      ) : null}
       <Flex
         style={{
           width: '100vw',
-          maxWidth: '1376px',
+          maxWidth: isMdDown
+            ? '760px'
+            : isLg
+              ? '1034px'
+              : !isXxl
+                ? '1344px'
+                : '1524px', // '1428px', // '1376px',
           position: 'sticky',
           top: 0,
         }}
+        vertical={!isXxl}
       >
-        {!isMdDown ? (
+        {isXxl ? (
           <Flex
             style={{
               width: '180px',
@@ -398,7 +459,7 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
               height: '100vh',
             }}
             gap={8}
-            vertical
+            vertical={isXxl}
           >
             <SwitchFilter
               label="Todos"
@@ -441,17 +502,21 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
                 <Carousel
                   arrows={
                     isXs
-                      ? productByType.productLists.length > 3
-                      : isLgDown
+                      ? productByType.productLists.length > 4
+                      : isMdDown
                         ? productByType.productLists.length > 4
-                        : productByType.productLists.length > 6
+                        : isLg
+                          ? productByType.productLists.length > 6
+                          : productByType.productLists.length > 8
                   }
                   dots={
                     isXs
-                      ? productByType.productLists.length > 3
-                      : isLgDown
+                      ? productByType.productLists.length > 4
+                      : isMdDown
                         ? productByType.productLists.length > 4
-                        : productByType.productLists.length > 6
+                        : isLg
+                          ? productByType.productLists.length > 6
+                          : productByType.productLists.length > 8
                   }
                   draggable={isLgDown}
                   infinite={false}
@@ -460,42 +525,71 @@ const Showcase = ({ isNavigating, setIsNavigating }: ShowcaseProps) => {
                   {Array.from({
                     length: Math.ceil(
                       isXs
-                        ? productByType.productLists.length / 3
-                        : isLgDown
+                        ? productByType.productLists.length / 4
+                        : isMdDown
                           ? productByType.productLists.length / 4
-                          : productByType.productLists.length / 6,
+                          : isLg
+                            ? productByType.productLists.length / 6
+                            : productByType.productLists.length / 8,
                     ),
                   }).map((_, index) => {
                     const start = isXs
-                      ? index * 3
-                      : isLgDown
+                      ? index * 4
+                      : isMdDown
                         ? index * 4
-                        : index * 6;
+                        : isLg
+                          ? index * 6
+                          : index * 8;
                     const productsChunk = productByType.productLists.slice(
                       start,
-                      isXs ? start + 3 : isLgDown ? start + 4 : start + 6,
+                      isXs
+                        ? start + 4
+                        : isMdDown
+                          ? start + 4
+                          : isLg
+                            ? start + 6
+                            : start + 8,
                     );
+                    let itemPosition: number | null = null;
 
                     return (
                       <div key={index}>
                         <Row
-                          gutter={isXs ? [0, 8] : [16, 16]}
+                          gutter={isXs ? [4, 8] : [16, 16]}
                           style={{
                             padding: isXs ? '0 36px 48px 36px' : '0 48px 48px',
                           }}
                         >
-                          {productsChunk.map((product) => (
-                            <Col
-                              xl={8}
-                              lg={12}
-                              md={12}
-                              xs={24}
-                              key={product.id}
-                              style={{ display: 'flex' }}
-                            >
-                              <ProductCard product={product} />
-                            </Col>
-                          ))}
+                          {productsChunk.map((product) => {
+                            if (isXs && itemPosition === null) {
+                              itemPosition = 0;
+                            } else if (
+                              isXs &&
+                              itemPosition !== null &&
+                              itemPosition > 3
+                            ) {
+                              itemPosition = 0;
+                            } else if (isXs && itemPosition !== null) {
+                              itemPosition += 1;
+                            }
+
+                            return (
+                              <Col
+                                xl={6}
+                                lg={8}
+                                md={12}
+                                sm={12}
+                                xs={12}
+                                key={product.id}
+                                style={{ display: 'flex' }}
+                              >
+                                <ProductCard
+                                  product={product}
+                                  position={itemPosition}
+                                />
+                              </Col>
+                            );
+                          })}
                         </Row>
                       </div>
                     );

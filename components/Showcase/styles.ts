@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const { Title } = Typography;
 
 export const ShowcaseContainerFlex = styled(Flex)`
-  background: #f7f7f7;
+  background: #f1f1f1;
   min-height: calc(100vh - 500px);
   width: 100%;
 `;
@@ -12,13 +12,23 @@ export const ShowcaseContainerFlex = styled(Flex)`
 export const ShowCaseFlex = styled(Flex)`
   /* width: 100%; */
   width: calc(100vw - 8px);
-  max-width: 1196px;
+  max-width: 1344px; // 1248px; // 1196px;
   /* max-width: fit-content; */
   /* max-width: 1472px; */
   padding: 32px 0;
 
-  @media (min-width: 992px) {
-    width: calc(100vw - 196px);
+  /* @media (max-width: 1599px) {
+    padding: 104px 0 32px 0;
+  } */
+
+  @media (max-width: 1199px) {
+    /* padding: 32px 0; */
+    max-width: 1034px;
+  }
+
+  @media (max-width: 991px) {
+    /* padding: 32px 0; */
+    max-width: 760px;
   }
 `;
 
@@ -30,12 +40,16 @@ export const ProductTypeSelectFlex = styled(Flex)`
 
 export const SearchAnFilterFlex = styled(Flex)`
   width: 100%;
-  max-width: 1376px;
-  padding: 16px 8px;
+  max-width: 1524px; // 1428;; // 1376px;
+  padding: 16px;
 
-  @media (min-width: 768px) {
-    padding: 16px;
+  @media (max-width: 1599px) {
+    max-width: 1344px;
   }
+
+  /* @media (min-width: 768px) {
+    padding: 16px;
+  } */
 `;
 
 export const LeftPanelArea = styled(Flex)`

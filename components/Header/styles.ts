@@ -39,11 +39,15 @@ export const HeaderContent = styled.div`
   display: flex;
   align-items: flex-end;
   height: 500px;
-  width: 1376px;
-  padding: 100px 8px 16px 8px;
+  width: 1524px;
+  padding: 100px 16px 16px 16px;
 
   @media (min-width: 768px) {
     padding: 100px 16px 32px 16px;
+  }
+
+  @media (max-width: 1599px) {
+    width: 1344px;
   }
 `;
 

@@ -1,17 +1,15 @@
 import ButtonWhatsapp from '@/components/ButtonWhatsapp';
-import ChooseButton from '@/components/ChooseButton';
 import { useAppSelector } from '@/hooks/redux';
 import { AddressProps } from '@/interfaces/AddressForm';
 import { AddressFormError } from '@/interfaces/AddressFormError';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { PaymentMethod } from '@/interfaces/PaymentMethod';
-import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
 import createOrderMessage from '@/utils/createOrderMessage';
 import { Button, Divider, Flex, Typography } from 'antd';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { TiArrowBackOutline } from 'react-icons/ti';
+import ProductInList from '@/components/ProductInList';
 
 interface CartResumeProps {
   addressForm: AddressProps;
@@ -37,6 +35,7 @@ const CartResume = ({
   const handleOrderButtonClicked = () => {
     if (orderButtonClicked && !releaseRedirection) {
       let newAddressFormError: AddressFormError = {
+        name: false,
         phone: false,
         streetName: false,
         number: false,
@@ -44,6 +43,9 @@ const CartResume = ({
         city: false,
         zipCode: false,
       };
+      if (addressForm.name.length < 2) {
+        newAddressFormError.name = true;
+      }
       if (!addressForm.streetName) {
         newAddressFormError.streetName = true;
       }
@@ -98,78 +100,18 @@ const CartResume = ({
   return (
     <Flex vertical gap={16} justify="space-between" style={{ height: '100%' }}>
       <Flex vertical gap={16} justify="space-between">
-        {cart &&
-          cart.cartItemList.map((item) => {
-            return (
-              <Flex vertical key={item.id}>
-                <Flex
-                  style={{ width: '100%', padding: '4px 0' }}
-                  gap={4}
+        <Flex vertical>
+          {cart &&
+            cart.cartItemList.map((item) => {
+              return (
+                <ProductInList
                   key={item.id}
-                >
-                  <Image
-                    src={item.product.image}
-                    alt="example"
-                    height={31.95}
-                    width={42.6}
-                  />
-                  <Flex
-                    vertical
-                    justify="space-between"
-                    style={{ width: '100%' }}
-                  >
-                    <Flex style={{ width: '100%' }} gap={4}>
-                      <Text style={{ fontWeight: 600, lineHeight: 1.1 }}>
-                        {item.product.title}
-                      </Text>
-                      {item.product.type === 'COMBO' ? (
-                        <Text
-                          style={{
-                            lineHeight: 1.1,
-                            fontSize: '12.8px',
-                          }}
-                        >
-                          {`${calculateComboTotalItems(item.product.ingredientList)} peças`}
-                        </Text>
-                      ) : null}
-                    </Flex>
-                    <Flex
-                      justify="space-between"
-                      align="flex-end"
-                      style={{ width: '100%' }}
-                    >
-                      <Flex vertical>
-                        <Text
-                          style={{
-                            fontSize: '12.8px',
-                            lineHeight: 1,
-                            fontWeight: 600,
-                          }}
-                        >
-                          val. unitário:
-                        </Text>
-                        <Text>
-                          {new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          }).format(item.product.price)}
-                        </Text>
-                      </Flex>
-                      <Flex gap={4}>
-                        <ChooseButton product={item.product} activeAlert />
-                        <Text style={{ width: '80px', textAlign: 'end' }}>
-                          {new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          }).format(item.product.price * item.quantity)}
-                        </Text>
-                      </Flex>
-                    </Flex>
-                  </Flex>
-                </Flex>
-              </Flex>
-            );
-          })}
+                  item={item}
+                  hideSeeCartInProductModal
+                />
+              );
+            })}
+        </Flex>
         <Divider style={{ margin: '8px 0' }} />
         {cart ? (
           <Flex vertical gap={8}>

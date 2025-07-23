@@ -1,4 +1,5 @@
 export interface AddressProps {
+  name: string;
   phone: string;
   streetName: string;
   number: string;

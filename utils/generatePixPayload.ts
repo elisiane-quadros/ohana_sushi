@@ -1,10 +1,11 @@
 import { createStaticPix, hasError } from 'pix-utils';
+import { pixKey } from './pixKey';
 
 const generatePixPayload = (value: number): string | null => {
   const pix = createStaticPix({
     merchantName: 'Ohana Sushi',
     merchantCity: 'Porto Alegre',
-    pixKey: '00033064024',
+    pixKey: pixKey,
     infoAdicional: 'Gerado por Ohana Sushi',
     transactionAmount: value,
   });

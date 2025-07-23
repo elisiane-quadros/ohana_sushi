@@ -24,13 +24,17 @@ export const AppBarArea = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1376px;
+  width: 1524px;
   height: 100px;
-  padding: 0 8px;
+  padding: 0 16px;
 
-  @media (min-width: 768px) {
-    padding: 0 16px;
+  @media (max-width: 1599px) {
+    width: 1344px;
   }
+
+  /* @media (min-width: 768px) {
+    padding: 0 16px;
+  } */
 `;
 
 export const HomeButton = styled(Button)`

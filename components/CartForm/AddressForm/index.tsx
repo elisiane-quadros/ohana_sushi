@@ -52,6 +52,18 @@ const AddressForm = ({
     return formatted;
   };
 
+  const handleName = (event: ChangeEvent<HTMLInputElement>) => {
+    const newName = event.target.value;
+    onAddressForm({ ...addressForm, name: newName });
+
+    if (newName.length) {
+      onAddressFormError({
+        ...addressFormError,
+        name: false,
+      });
+    }
+  };
+
   const handlePhone = (event: ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhoneNumber(event.target.value);
     onAddressForm({ ...addressForm, phone: formatted });
@@ -203,7 +215,23 @@ const AddressForm = ({
         </Title>
       </Flex>
       <Row gutter={8}>
-        <Col span={24}>
+        <Col xs={24} md={12}>
+          <InputForm
+            label="Nome *"
+            value={addressForm.name}
+            onChange={handleName}
+            maxLength={100}
+            errorMessage={
+              addressForm.name.length === 0
+                ? 'Nome é obrigatório'
+                : addressForm.name.length === 1
+                  ? 'Nome deve ter pelo menos 2 caracteres'
+                  : 'Nome inválido'
+            }
+            showErrorMessage={addressFormError.name}
+          />
+        </Col>
+        <Col xs={24} md={12}>
           <InputForm
             label="Whatsapp *"
             value={addressForm.phone}

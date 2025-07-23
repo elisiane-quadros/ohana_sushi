@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
 import { Product } from '@/interfaces/Product';
 import { CartItemList } from '@/interfaces/CartItemList';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { setCart } from '@/store/features/cart';
 import { Flex, Typography } from 'antd';
@@ -19,12 +19,18 @@ interface ChooseButtonProps {
   product: Product;
   activeAlert?: boolean;
   sunButton?: boolean;
+  hasItem?: boolean;
+  onHasItem?: Dispatch<SetStateAction<boolean>>;
+  onCurrentActiveKey?: Dispatch<SetStateAction<string[]>>;
 }
 
 const ChooseButton = ({
   product,
   activeAlert = false,
   sunButton,
+  hasItem = false,
+  onHasItem = () => {},
+  onCurrentActiveKey,
 }: ChooseButtonProps) => {
   const dispatch = useAppDispatch();
   const { Text } = Typography;
@@ -37,6 +43,10 @@ const ChooseButton = ({
     if (activeAlert && quantityItem === 1) {
       setIsRemoveItemModalOpen(true);
       return;
+    }
+
+    if (quantityItem === 1 && onCurrentActiveKey) {
+      onCurrentActiveKey([]);
     }
     if (quantityItem > 0 && cart) {
       setQuantityItem(quantityItem - 1);
@@ -54,7 +64,6 @@ const ChooseButton = ({
 
       const newCart: CartInterface = {
         ...cart,
-        // deliveryCost: cart.deliveryCost || 0,
         value: cart.value - product.price,
         cartItemList: newCartItem,
       };
@@ -130,6 +139,7 @@ const ChooseButton = ({
         cart.cartItemList.find((cartItem) => cartItem.id === product.id)
           ?.quantity || 0;
       setQuantityItem(newQuantityItem);
+      onHasItem(newQuantityItem > 0);
     }
   }, [cart]);
 
@@ -150,12 +160,13 @@ const ChooseButton = ({
           <Flex
             align="center"
             justify="center"
-            style={{ width: '28px', height: '28px', margin: '0 4px' }}
+            style={{ width: '28px', margin: '0 4px' }}
           >
             <Text
               style={{
                 fontWeight: 600,
-                fontSize: sunButton ? '1rem' : '0.9rem',
+                fontSize: sunButton ? '1.1rem' : '0.9rem',
+                color: sunButton ? '#FFF' : '#000',
               }}
             >
               {quantityItem}

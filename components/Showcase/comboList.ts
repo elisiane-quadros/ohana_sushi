@@ -17,13 +17,23 @@ export const comboList: Product[] = [
       },
       {
         id: 2,
-        name: 'niguiri salmão(4 crus e 4 selados)',
-        quantity: 8,
+        name: 'niguiri salmão cru',
+        quantity: 4,
+      },
+      {
+        id: 2.5,
+        name: 'niguiri salmão selado',
+        quantity: 4,
       },
       {
         id: 3,
-        name: 'lâminas de salmão(10 cruas e 10 seladas)',
-        quantity: 20,
+        name: 'lâminas de salmão cruas',
+        quantity: 10,
+      },
+      {
+        id: 3.5,
+        name: 'lâminas de salmão seladas',
+        quantity: 10,
       },
       {
         id: 4,
@@ -58,8 +68,13 @@ export const comboList: Product[] = [
       },
       {
         id: 3,
-        name: 'lâminas de salmão(5 cruas e 5 seladas)',
-        quantity: 10,
+        name: 'lâminas de salmão cruas',
+        quantity: 5,
+      },
+      {
+        id: 3,
+        name: 'lâminas de salmão seladas',
+        quantity: 5,
       },
       {
         id: 4,
@@ -557,13 +572,23 @@ export const comboList: Product[] = [
       },
       {
         id: 2,
-        name: 'niguiri salmão(4 crus e 4 selados)',
-        quantity: 8,
+        name: 'niguiri salmão cru',
+        quantity: 4,
+      },
+      {
+        id: 2.5,
+        name: 'niguiri salmão selado',
+        quantity: 4,
       },
       {
         id: 3,
-        name: 'lâminas de salmão(10 cruas e 10 seladas)',
-        quantity: 20,
+        name: 'lâminas de salmão cruas',
+        quantity: 10,
+      },
+      {
+        id: 3.5,
+        name: 'lâminas de salmão seladas',
+        quantity: 10,
       },
       {
         id: 5,

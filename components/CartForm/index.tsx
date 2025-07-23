@@ -37,6 +37,7 @@ const CartForm = ({ orderCompleted, onOrderCompleted }: CartFormProps) => {
   //   useState(false);
 
   const [addressForm, setAddressForm] = useState<AddressProps>({
+    name: '',
     phone: '',
     streetName: '',
     number: '',
@@ -48,6 +49,7 @@ const CartForm = ({ orderCompleted, onOrderCompleted }: CartFormProps) => {
     deliveryCost: 0,
   });
   const [addressFormError, setAddressFormError] = useState<AddressFormError>({
+    name: false,
     phone: false,
     streetName: false,
     number: false,

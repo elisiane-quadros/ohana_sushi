@@ -47,7 +47,7 @@ const CartArea = () => {
           justify="center"
           style={{ width: '100%', marginTop: '100px', background: '#f7f7f7' }}
         >
-          <Flex style={{ width: '100%', maxWidth: '1376px', margin: '12px 0' }}>
+          <Flex style={{ width: '100%', maxWidth: '1524px', margin: '12px 0' }}>
             <CartForm
               orderCompleted={orderCompleted}
               onOrderCompleted={setOrderCompleted}

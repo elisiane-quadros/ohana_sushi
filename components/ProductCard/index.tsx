@@ -1,35 +1,37 @@
 import { Product } from '@/interfaces/Product';
 import { ProductCardContainerFlex } from './styles';
-import { Button, Divider, Flex, Popover, Tag, Typography } from 'antd';
-import SunFamily from '../SunFamily';
+import { Flex, Tag, Typography } from 'antd';
 import calculateComboTotalItems from '@/utils/calculateComboTotalItems';
 import ChooseButton from '../ChooseButton';
 import { CartInterface } from '@/interfaces/CartInterface';
 import { useAppSelector } from '@/hooks/redux';
-import ButtonLink from '../ButtonLink';
 import useResponsive from '@/hooks/useResponsive';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
+
+import './styles.css';
+import ProductModal from '../ProductModal';
 
 interface ProductCardProps {
   product: Product;
+  position: number | null;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, position }: ProductCardProps) => {
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
+
   const { Title, Text } = Typography;
   const { isMdDown, isXs } = useResponsive();
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
+  const [hasItem, setHasItem] = useState(false);
+  const [openProductModal, setOpenProductModal] = useState(false);
 
-  const handleImageError = (error: any) => {
-    console.log('Erro ao carregar imagem:', error);
-    console.log('URL da imagem:', product.image);
+  const handleImageError = () => {
     setImageError(true);
   };
 
   const handleImageLoad = () => {
-    console.log('Imagem carregada com sucesso:', product.image);
     setImageLoading(false);
   };
 
@@ -46,117 +48,167 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <ProductCardContainerFlex
+      $hasProduct={findProductQuantityInCart(product.id)}
+      $isXs={isXs}
+      $isMdDown={isMdDown}
+      $position={position}
       vertical
       justify="space-between"
-      style={{
-        minHeight: `${isXs ? '168px' : isMdDown ? '210px' : '240px'}`,
-        borderRadius: '4px',
-        borderWidth: '1px',
-        borderStyle: 'solid',
-        borderColor: findProductQuantityInCart(product.id) ? '#d81616' : '',
-        boxShadow: findProductQuantityInCart(product.id)
-          ? '2px 2px 8px 1px #d81616aa'
-          : 'none',
-      }}
     >
       <Flex
         vertical
         style={{
-          padding: '8px',
+          padding: '8px 8px 0 8px',
+          height: '100%',
+          background: '#fff',
+          borderRadius:
+            isXs && position === 0
+              ? '3px 0 0 3px'
+              : isXs && position === 1
+                ? '0 3px 3px 0'
+                : isXs && position === 2
+                  ? '3px 0 0 3px'
+                  : isXs && position === 3
+                    ? '0 3px 3px 0'
+                    : '3px 3px 0 0',
         }}
       >
-        <Flex gap={4} align="center" justify="space-between">
+        <Flex
+          gap={4}
+          align="center"
+          justify="space-between"
+          style={{ cursor: 'pointer', marginBottom: '8px' }}
+          onClick={() => setOpenProductModal(true)}
+          vertical={isXs}
+        >
           <Title
             level={5}
             style={{
               margin: 0,
-              fontSize: `${isMdDown ? '1.2rem' : '1.4rem'}`,
-              color: '#d81616',
-              fontWeight: 400,
+              fontSize: `${product.title.length > 16 ? '1.2rem' : isMdDown ? '1.2rem' : '1.4rem'}`,
+              fontWeight: 700,
+              fontFamily: 'var(--inria-sans) !important',
+              lineHeight: 1.1,
+              height: '42px',
+              alignContent: 'center',
             }}
           >
             {product.title}
           </Title>
-          <Tag style={{ marginInlineEnd: '0px' }} color="#000">
-            <Text
+          {product.type === 'COMBO' ? (
+            <Tag
               style={{
-                fontSize: '0.8rem',
-                color: '#fff',
-                lineHeight: 1.1,
-                fontWeight: 600,
+                marginInlineEnd: '0px',
+                marginBottom: isXs ? '4px' : '',
+                border: isXs ? '1px solid #333' : 'none',
+                width: isXs ? '100%' : 'auto',
+                textAlign: isXs ? 'center' : 'left',
               }}
+              color={isXs ? '#FFF' : '#000'}
             >
-              {product.type === 'COMBO'
-                ? `${calculateComboTotalItems(product.ingredientList)} peças`
-                : ''}
-            </Text>
-          </Tag>
+              <Text
+                style={{
+                  fontSize: '0.8rem',
+                  color: isXs ? '#333' : '#fff',
+
+                  padding: isXs ? '2px 4px' : '0',
+
+                  lineHeight: 1.1,
+                  fontWeight: 600,
+                }}
+              >
+                {`${calculateComboTotalItems(product.ingredientList)} peças`}
+              </Text>
+            </Tag>
+          ) : null}
         </Flex>
-        <Flex gap={8}>
-          <Flex>
+        <Flex vertical justify="space-between" style={{ height: '100%' }}>
+          <Flex vertical>
             {imageError ? (
               <div
                 style={{
-                  width: `${isMdDown ? '100px' : '160px'}`,
-                  height: `${isMdDown ? '75px' : '120px'}`,
+                  width: '100%',
+                  aspectRatio: '1/1',
                   background: '#f0f0f0',
                   borderRadius: '4px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#999',
+                  cursor: 'pointer',
                 }}
+                onClick={() => setOpenProductModal(true)}
               >
                 <Text style={{ fontSize: '0.8rem' }}>
                   Imagem não disponível
                 </Text>
               </div>
             ) : (
-              <Image
-                src={product.image}
-                alt={product.title}
-                height={180}
-                width={240}
+              <div
                 style={{
-                  width: `${isMdDown ? '100px' : '160px'}`,
-                  height: `${isMdDown ? '75px' : '120px'}`,
+                  width: '100%',
+                  aspectRatio: '1/1',
+                  position: 'relative',
                   background: imageLoading ? '#f0f0f0' : '#fff',
                   borderRadius: '4px',
-                  objectFit: 'cover',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
                 }}
-                onError={handleImageError}
-                onLoad={handleImageLoad}
-                unoptimized={true}
-              />
-            )}
-          </Flex>
-          <Flex vertical gap={6} style={{ width: '100%' }}>
-            {product.ingredientList.map((ingredient) => {
-              return (
-                <Text
-                  key={ingredient.id}
+                onClick={() => setOpenProductModal(true)}
+              >
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  fill
+                  sizes="(max-width: 768px) 100px, (max-width: 992px) 160px, 240px"
                   style={{
-                    fontSize: '0.875rem',
-                    color: '#000',
-                    lineHeight: 1.1,
+                    objectFit: 'cover',
                   }}
-                >
-                  {ingredient.quantity} - {ingredient.name}
-                </Text>
-              );
-            })}
+                  onError={handleImageError}
+                  onLoad={handleImageLoad}
+                  unoptimized={true}
+                />
+              </div>
+            )}
+            <Text
+              ellipsis
+              style={{
+                color: '#333',
+                padding: '8px 4px 6px 4px',
+                cursor: 'pointer',
+              }}
+              onClick={() => setOpenProductModal(true)}
+            >
+              {product.ingredientList.map((ingredient, index) => {
+                return `${ingredient.quantity} ${ingredient.name} ${index < product.ingredientList.length - 1 ? ', ' : ''}`;
+              })}
+            </Text>
           </Flex>
         </Flex>
       </Flex>
       <Flex
         justify="space-between"
-        align="center"
+        align={isXs ? 'flex-end' : 'center'}
         style={{
-          background: 'linear-gradient(to right, #d81616aa, #d8161633)',
+          background: '#000',
           padding: '8px',
           borderTop: isXs ? 'none' : '1px solid #d9d9d9',
-          borderRadius: '0 0 2px 2px',
+          borderRadius:
+            isXs && position === 0
+              ? '0 0 0 3px'
+              : isXs && position === 1
+                ? '0 0 3px 0'
+                : isXs && position === 2
+                  ? '0 0 0 3px'
+                  : isXs && position === 3
+                    ? '0 0 3px 0'
+                    : '0 0 3px 3px',
+          overflow: 'hidden',
+          height: '100%',
+          flexDirection: isXs ? 'column-reverse' : 'row',
         }}
+        gap={8}
+        // vertical={isXs}
       >
         <Title
           level={5}
@@ -164,9 +216,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
             marginBottom: 0,
             marginTop: 0,
             lineHeight: 1.2,
-            color: '#000',
+            color: '#fff',
             fontSize: '1.3rem',
             fontFamily: 'var(--inria-sans) !important',
+            width: 'fit-content',
+            wordBreak: 'keep-all',
           }}
         >
           {new Intl.NumberFormat('pt-BR', {
@@ -174,8 +228,18 @@ const ProductCard = ({ product }: ProductCardProps) => {
             currency: 'BRL',
           }).format(product.price)}
         </Title>
-        <ChooseButton product={product} sunButton />
+        <ChooseButton
+          product={product}
+          sunButton
+          hasItem={hasItem}
+          onHasItem={setHasItem}
+        />
       </Flex>
+      <ProductModal
+        isModalOpen={openProductModal}
+        onModalClose={() => setOpenProductModal(false)}
+        product={product}
+      />
     </ProductCardContainerFlex>
   );
 };
