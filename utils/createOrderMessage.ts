@@ -50,15 +50,7 @@ const createOrderMessage = (
   message += `\n ${selectedPaymentMethod?.type === 'PIX' ? `*Chave PIX*: ${pixKey}` : 'Obs.: Pagamento na entrega'}\n`;
 
   message += selectedPaymentMethod?.type === 'PIX' ? '\n*ATENÇÃO!!!*' : '';
-  message += `\n${selectedPaymentMethod?.type === 'PIX' ? 'Envie o comprovante do Pix para concluir o seu pedido!' : 'Aguardo a confirmação! 😊'}`;
-
-  message += `Código do pedido: \`#${cart.id}\`\n`;
-
-  message += `\`\`\`
-RESUMO DO PEDIDO
-Total de itens: ${cart.cartItemList.length}
-Valor total: R$ 1.000,00
-\`\`\`\n`;
+  message += `\n${selectedPaymentMethod?.type === 'PIX' ? 'Envie o comprovante do Pix para concluir o seu pedido!' : ''}`;
 
   return encodeURIComponent(message);
 };

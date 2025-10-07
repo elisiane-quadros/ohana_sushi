@@ -39,7 +39,8 @@ export const persistor = persistStore(store);
 // };
 
 // export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<typeof store.getState>;
+// Use o tipo do rootReducer diretamente, não do store persistido
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 // Infer the `RootState`,  `AppDispatch`, and `AppStore` types from the store itself
 // export type { RootState };
