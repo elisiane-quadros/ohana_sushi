@@ -27,7 +27,7 @@ import ButtonWhatsapp from '../ButtonWhatsapp';
 import createOrderMessage from '@/utils/createOrderMessage';
 import { useAppSelector } from '@/hooks/redux';
 import { Order } from '@/interfaces/Order';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import generatePixPayload from '@/utils/generatePixPayload';
 import PixQRCodeModal from '../PixQRCodeModal';
 import { useRouter } from 'next/navigation';
@@ -44,6 +44,17 @@ const OrderCompleted = () => {
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
   const [isQRCodeModalOpen, setIsQRCodeModalOpen] = useState(false);
 
+  // Safe computed values to prevent crashes
+  const safeCurrentOrder = useMemo(() => currentOrder, [currentOrder]);
+  const cartItem = useMemo(
+    () => safeCurrentOrder?.cartList?.[0] || null,
+    [safeCurrentOrder],
+  );
+  const totalValue = useMemo(
+    () => (cartItem ? cartItem.value + cartItem.deliveryCost : 0),
+    [cartItem],
+  );
+
   const handleCopyToClipboard = async (type: 'KEY' | 'CODE') => {
     try {
       if (type === 'KEY') {
@@ -54,12 +65,9 @@ const OrderCompleted = () => {
         });
         return;
       }
-      if (type === 'CODE' && currentOrder) {
+      if (type === 'CODE' && cartItem) {
         await navigator.clipboard.writeText(
-          generatePixPayload(
-            currentOrder.cartList[0].value +
-              currentOrder.cartList[0].deliveryCost,
-          ) || '',
+          generatePixPayload(totalValue) || '',
         );
         messageApi.open({
           type: 'success',
@@ -232,10 +240,7 @@ const OrderCompleted = () => {
                       <PixQRCodeModal
                         isQRCodeModalOpen={isQRCodeModalOpen}
                         onIsQRCodeModalOpen={setIsQRCodeModalOpen}
-                        value={
-                          currentOrder.cartList[0].value +
-                          currentOrder.cartList[0].deliveryCost
-                        }
+                        value={totalValue}
                       />
                     </Flex>
                   ) : null}
@@ -263,7 +268,7 @@ const OrderCompleted = () => {
                   </Title>
                 </Flex>
                 <Flex vertical gap={8}>
-                  {currentOrder.cartList[0].cartItemList.map(
+                  {cartItem?.cartItemList?.map(
                     (item) => (
                       <ProductInList
                         key={item.id}
@@ -363,7 +368,7 @@ const OrderCompleted = () => {
                       {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
-                      }).format(currentOrder.cartList[0].value)}
+                      }).format(cartItem?.value || 0)}
                     </Text>
                   </Flex>
                   <Flex justify="space-between">
@@ -372,7 +377,7 @@ const OrderCompleted = () => {
                       {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
-                      }).format(currentOrder.cartList[0].deliveryCost)}
+                      }).format(cartItem?.deliveryCost || 0)}
                     </Text>
                   </Flex>
                   <Flex justify="space-between">
@@ -381,17 +386,18 @@ const OrderCompleted = () => {
                       {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
-                      }).format(
-                        currentOrder.cartList[0].value +
-                          currentOrder.cartList[0].deliveryCost,
-                      )}
+                      }).format(totalValue)}
                     </Text>
                   </Flex>
                 </Flex>
               </Col>
             </Row>
           </Flex>
-        ) : null}
+        ) : (
+          <Flex justify="center" align="center" style={{ minHeight: '200px' }}>
+            <Text type="secondary">Nenhum pedido encontrado</Text>
+          </Flex>
+        )}
       </Card>
       <Card
         style={{
@@ -421,13 +427,13 @@ const OrderCompleted = () => {
             </Flex>
           </Col>
           <Col xs={24} md={24} lg={10}>
-            {currentOrder?.paymentMethod ? (
+            {safeCurrentOrder?.paymentMethod && cartItem ? (
               <ButtonWhatsapp
                 whatsappNumber="51996090597"
                 whatsappText={createOrderMessage(
-                  currentOrder?.addressForm,
-                  currentOrder?.paymentMethod,
-                  currentOrder?.cartList[0],
+                  safeCurrentOrder.addressForm,
+                  safeCurrentOrder.paymentMethod,
+                  cartItem,
                 )}
                 style={{
                   width: '100%',
