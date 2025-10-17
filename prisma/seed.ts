@@ -1,14 +1,14 @@
-import { PrismaClient } from '@prisma/client'
-import productList from '../components/Showcase/productList'
+import { PrismaClient } from '@prisma/client';
+import productList from '../components/Showcase/productList';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting seed...')
+  console.log('🌱 Starting seed...');
 
   // Clean existing data
-  await prisma.ingredient.deleteMany()
-  await prisma.product.deleteMany()
+  await prisma.ingredient.deleteMany();
+  await prisma.product.deleteMany();
 
   // Seed products
   for (const product of productList) {
@@ -21,23 +21,23 @@ async function main() {
         type: product.type,
         order: product.order,
         ingredients: {
-          create: product.ingredientList.map(ingredient => ({
+          create: product.ingredientList.map((ingredient) => ({
             name: ingredient.name,
             quantity: ingredient.quantity,
           })),
         },
       },
-    })
+    });
   }
 
-  console.log(`✅ Seeded ${productList.length} products`)
+  console.log(`✅ Seeded ${productList.length} products`);
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed failed:', e)
-    process.exit(1)
+    console.error('❌ Seed failed:', e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });
