@@ -13,7 +13,8 @@ import { Suspense, useEffect, useState } from 'react';
 type CartStatusType = 'RELEASE' | 'NOT_FOUND' | 'LOADING' | 'ORDER_COMPLETED';
 
 const CartArea = () => {
-  const urlCartId = useParams().id;
+  const params = useParams();
+  const urlCartId = params?.id;
   const router = useRouter();
 
   const cart: CartInterface | null = useAppSelector((state) => state.cart.cart);
