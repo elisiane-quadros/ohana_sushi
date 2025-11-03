@@ -13,7 +13,9 @@ export default function ProductsTest() {
     return (
       <Flex justify="center" align="center" style={{ minHeight: '200px' }}>
         <Spin size="large" />
-        <Text style={{ marginLeft: '16px' }}>Carregando produtos da API...</Text>
+        <Text style={{ marginLeft: '16px' }}>
+          Carregando produtos da API...
+        </Text>
       </Flex>
     );
   }
@@ -26,11 +28,7 @@ export default function ProductsTest() {
         type="error"
         showIcon
         action={
-          <Button
-            size="small"
-            icon={<ReloadOutlined />}
-            onClick={refetch}
-          >
+          <Button size="small" icon={<ReloadOutlined />} onClick={refetch}>
             Tentar novamente
           </Button>
         }
@@ -45,15 +43,11 @@ export default function ProductsTest() {
           <Title level={4}>
             ✅ API funcionando! {products.length} produtos carregados
           </Title>
-          <Button 
-            icon={<ReloadOutlined />} 
-            onClick={refetch}
-            type="primary"
-          >
+          <Button icon={<ReloadOutlined />} onClick={refetch} type="primary">
             Recarregar
           </Button>
         </Flex>
-        
+
         <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
           {products.slice(0, 5).map((product) => (
             <Card

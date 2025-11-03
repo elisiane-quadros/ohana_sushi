@@ -12,7 +12,9 @@ interface UseProductsReturn {
   refetch: () => Promise<void>;
 }
 
-export const useProducts = (options: UseProductsOptions = {}): UseProductsReturn => {
+export const useProducts = (
+  options: UseProductsOptions = {},
+): UseProductsReturn => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,13 +30,13 @@ export const useProducts = (options: UseProductsOptions = {}): UseProductsReturn
       }
 
       const response = await fetch(`/api/products?${params.toString()}`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       // Transform API response to match frontend interface
       const transformedProducts: Product[] = data.map((product: any) => ({
         id: product.id,
@@ -52,7 +54,8 @@ export const useProducts = (options: UseProductsOptions = {}): UseProductsReturn
 
       setProducts(transformedProducts);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
       console.error('Error fetching products:', err);
     } finally {
